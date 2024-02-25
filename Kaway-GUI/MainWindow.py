@@ -7,64 +7,38 @@ import sys
 import warnings
 import os
 import cv2
+from functools import partial
+
+#Detection req import
+import cv2
+import numpy as np
+import os
+from matplotlib import pyplot as plt
+import time
+import datetime
+import mediapipe as mp
+from keras.models import Sequential
+from keras.layers import LSTM, Dense
+from keras.callbacks import TensorBoard
+from sklearn.model_selection import train_test_split
+from keras.utils import to_categorical
+from scipy import stats
+
+#import functions
+from assessments import *
 
 # initialize files and warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-path = "C:/Users/hyanx/Documents/Thesis/Kaway-GUI/"
-os.chdir(path)
+path = os.getcwd()
+startLSTM = 0
+
+#initialize mediapipe
+mp_holistic = mp.solutions.holistic # Holistic model
+mp_drawing = mp.solutions.drawing_utils # Drawing utilities
 
 
-class UI(QMainWindow):
-    def __init__(self):
-        super(UI, self).__init__()
 
-        # Load the ui
-        uic.loadUi("interface.ui", self)
-
-        # Define the widgets here
-        self.HomeButton = self.findChild(QPushButton, "Home")
-        self.cameraFrame = self.findChild(QLabel, "CameraFrame")
-
-        # Define what widgets do
-        self.HomeButton.clicked.connect(self.startCamera)
-
-        # Instance variable for capturing camera frames
-        self.cap = None
-
-        # Show app
-        self.show()
-
-    def startCamera(self):
-        self.cap = cv2.VideoCapture(1)  # Open the camera(value depends on camera used, 0 for integrated camera. Check device list to confirm)
-        if not self.cap.isOpened():
-            print("Error: Couldn't open camera.")
-            return
-
-        # Set camera resolution (adjust as needed)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-
-        # Set up timer to read frames and update GUI
-        timer = QTimer(self)
-        timer.timeout.connect(self.updateFrame)
-        timer.start(1000 // 40)  # Read frames every 33 ms (30 fps)
-    
-    def updateFrame(self):
-        ret, frame = self.cap.read()  # Read frame from camera
-        if ret:
-             # Resize frame
-            frame = cv2.resize(frame, (640, 360))  # Adjust the dimensions as needed
-            # Convert frame to RGB format
-            rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            
-            
-            # Convert RGB image to QImage
-            h, w, ch = rgbImage.shape
-            bytesPerLine = ch * w
-            qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
-            # Convert QImage to QPixmap to display in QLabel
-            pixmap = QPixmap.fromImage(qImg)
-            self.cameraFrame.setPixmap(pixmap)
+        
 
 
 # initialize the app
