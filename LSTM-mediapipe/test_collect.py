@@ -52,11 +52,11 @@ def extract_keypoints(results):
     return np.concatenate([pose, face, lh, rh])
 
 # Path for exported data, numpy arrays
-path = "E:/Kaway-Elearn/LSTM-mediapipe/DATASET JULIAN"
+path = os.getcwd()
 DATA_PATH = os.path.join(path,'MP_Data') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['a', 'b', 'c'])
+actions = np.array(['kamusta ka'])
 
 # Thirty videos worth of data
 no_sequences = 33
