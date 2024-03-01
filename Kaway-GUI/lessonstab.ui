@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1910</width>
-    <height>950</height>
+    <height>980</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -306,9 +306,9 @@ border-bottom-right-radius: 32px;</string>
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>450</y>
+        <y>290</y>
         <width>1501</width>
-        <height>331</height>
+        <height>81</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -328,7 +328,7 @@ border-radius: 32px</string>
         <x>30</x>
         <y>170</y>
         <width>1521</width>
-        <height>571</height>
+        <height>161</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -344,8 +344,8 @@ border-radius: 32px</string>
       <widget class="QLabel" name="AnswerText">
        <property name="geometry">
         <rect>
-         <x>380</x>
-         <y>500</y>
+         <x>50</x>
+         <y>90</y>
          <width>751</width>
          <height>71</height>
         </rect>
@@ -364,7 +364,7 @@ border-radius: 32px</string>
         <string>A</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
        </property>
       </widget>
      </widget>
@@ -374,7 +374,7 @@ border-radius: 32px</string>
         <x>20</x>
         <y>120</y>
         <width>1541</width>
-        <height>541</height>
+        <height>121</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -388,173 +388,6 @@ border-radius: 32px
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLabel" name="CameraFrame">
-       <property name="geometry">
-        <rect>
-         <x>360</x>
-         <y>20</y>
-         <width>991</width>
-         <height>491</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="StartCamera">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>60</y>
-         <width>131</width>
-         <height>211</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>Poppins</family>
-         <pointsize>28</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(82, 126, 147);
-border-radius: 32px
-</string>
-       </property>
-       <property name="text">
-        <string>CAM</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="StartDetection">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>280</y>
-         <width>131</width>
-         <height>211</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>Poppins</family>
-         <pointsize>28</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(82, 126, 147);
-border-radius: 32px
-</string>
-       </property>
-       <property name="text">
-        <string>START</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QFrame" name="frame_4">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>790</y>
-        <width>1541</width>
-        <height>101</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(142, 202, 230);
-border-radius: 32px
-</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QPushButton" name="NextModule">
-       <property name="geometry">
-        <rect>
-         <x>1260</x>
-         <y>10</y>
-         <width>271</width>
-         <height>81</height>
-        </rect>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Poppins</family>
-         <pointsize>28</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(82, 126, 147);
-border-radius: 32px
-</string>
-       </property>
-       <property name="text">
-        <string>Next Module</string>
-       </property>
-      </widget>
-      <widget class="QWidget" name="verticalLayoutWidget_5">
-       <property name="geometry">
-        <rect>
-         <x>220</x>
-         <y>0</y>
-         <width>831</width>
-         <height>101</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
-         <widget class="QLabel" name="UserAnswer">
-          <property name="font">
-           <font>
-            <family>Inter</family>
-            <pointsize>48</pointsize>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">color: rgb(0, 255, 0);</string>
-          </property>
-          <property name="text">
-           <string>A</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="ReviewButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <family>Inter</family>
-            <pointsize>20</pointsize>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Click here to review again</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
      </widget>
      <widget class="QFrame" name="mainframe">
       <property name="geometry">
@@ -599,7 +432,7 @@ border-bottom-right-radius: 32px;</string>
            <string notr="true">color: rgb(255, 255, 255);</string>
           </property>
           <property name="text">
-           <string>Module 1:</string>
+           <string>Modules</string>
           </property>
          </widget>
         </item>
@@ -616,7 +449,7 @@ border-bottom-right-radius: 32px;</string>
            <string notr="true">color: rgb(255, 255, 255);</string>
           </property>
           <property name="text">
-           <string>Subtopic 1: Letters</string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -686,7 +519,6 @@ background-color: rgb(251, 133, 0);
      <zorder>LowerFrame</zorder>
      <zorder>MidFrame</zorder>
      <zorder>UpperFrame</zorder>
-     <zorder>frame_4</zorder>
     </widget>
     <widget class="QFrame" name="MainFrame">
      <property name="geometry">
