@@ -60,11 +60,11 @@ def extract_keypoints(results):
 
 actions = np.array(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'NG', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'])
 model = Sequential()
-model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(40,1662)))
-model.add(LSTM(128, return_sequences=True, activation='relu'))
-model.add(LSTM(64, return_sequences=False, activation='relu'))
-model.add(Dense(64, activation='relu'))
+model.add(LSTM(32, return_sequences=True, activation='relu', input_shape=(40,1662)))
+model.add(LSTM(64, return_sequences=True, activation='relu'))
+model.add(LSTM(32, return_sequences=False, activation='relu'))
 model.add(Dense(32, activation='relu'))
+model.add(Dense(16, activation='relu'))
 model.add(Dense(actions.shape[0], activation='softmax'))
 model.load_weights('C:/Users/hyanx/Documents/Thesis/MP_Julian/action.h5')
 
@@ -83,7 +83,7 @@ sentence = []
 predictions = []
 threshold = 0.5
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 # Set mediapipe model 
 with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
     while cap.isOpened():
