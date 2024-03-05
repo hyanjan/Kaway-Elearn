@@ -53,10 +53,10 @@ def extract_keypoints(results):
 
 # Path for exported data, numpy arrays
 path = os.getcwd()
-DATA_PATH = os.path.join(path,'MP_Joshua') 
+DATA_PATH = os.path.join(path,'MP_Julian2') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['magandang gabi'])
+actions = np.array(['j'])
 
 # Thirty videos worth of data
 no_sequences = 33

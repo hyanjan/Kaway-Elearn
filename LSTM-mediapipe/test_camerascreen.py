@@ -67,7 +67,7 @@ model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,16
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
 model.add(Dense(actions.shape[0], activation='softmax'))
-model.load_weights('C:/Users/hyanx/Documents/Thesis/MP_Julian/letters.h5')
+model.load_weights('/Users/atp002332/Documents/GitHub/Kaway-Elearn/MP_Julian/letters.h5')
 
 colors = [(245,117,16), (117,245,16), (16,117,245)]
 def prob_viz(res, actions, input_frame, colors):
@@ -82,7 +82,7 @@ threshold = 0.5
 
 
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 # Set mediapipe model 
 with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
