@@ -54,10 +54,10 @@ def extract_keypoints(results):
 
 # Path for exported data, numpy arrays
 path = "C:/Users/hyanx/Documents/Thesis/"
-DATA_PATH = os.path.join(path,'MP_Julian') 
+DATA_PATH = os.path.join(path,'MP_Hyan') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'])
+actions = np.array(['Ako si', 'Ilang taon ka na', 'Sino', 'Sino ka'])
 
 # Thirty videos worth of data
 no_sequences = 33
@@ -116,19 +116,19 @@ model = Sequential()
 model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
 # model.add(LSTM(128, return_sequences=True, activation='relu'))
 # model.add(LSTM(64, return_sequences=False, activation='relu'))
-model.add(Dense(64, activation='relu'))
-model.add(Dense(32, activation='relu'))
+# model.add(Dense(64, activation='relu'))
+model.add(Dense(16, activation='relu'))
 model.add(Dense(actions.shape[0], activation='softmax'))
 
 #opt = SGD(lr=0.0001)
 model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
-model.fit(X_train, y_train, epochs=350, callbacks=[tb_callback])
+model.fit(X_train, y_train, epochs=100, callbacks=[tb_callback])
 model.summary()
 
 
 
 #Save model
-model.save('C:/Users/hyanx/Documents/Thesis/MP_Julian/letters.h5')
+model.save('C:/Users/hyanx/Documents/Thesis/MP_Hyan/introduction.h5')
 
 
 # Real-time Test

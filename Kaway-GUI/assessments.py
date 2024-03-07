@@ -1,8 +1,8 @@
 # Pyqt import
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QFrame, QLabel, QPushButton, QVBoxLayout, QStatusBar
+from PyQt5.QtWidgets import *
 from PyQt5 import uic
-from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtCore import QTimer
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 import sys
 import warnings
 import os
@@ -42,29 +42,52 @@ class UI(QMainWindow):
         self.detectionButton = self.findChild(QPushButton, "StartDetection")
 
         # Define what widgets do
-        self.cameraButton.clicked.connect(self.startCamera)
+        self.cameraButton.clicked.connect(self.startCameraGUI)
         self.detectionButton.clicked.connect(self.startTimer)
 
         # Instance variable for capturing camera frames
         self.cap = None
+        self.Detection = Detection()
+        self.Detection.CameraFrame.connect(self.UpdateFrame)
+        self.Detection.start()
 
+        
         # Show app
         self.show()
 
+    def startCameraGUI(self):
+        self.Detection.startCamera()
+        
+    def UpdateFrame(self, img):
+        self.cameraFrame.setPixmap(QPixmap.fromImage(img))
+
+    def startTimer(self):
+        self.Detection.startTimer()
+
+        
+
+class Detection(QThread):
+    #Initialize Class UI
+    CameraFrame = pyqtSignal(QImage)
+    global threadCamera
+    threadCamera = False
+
     def startCamera(self):
-        self.cap = cv2.VideoCapture(0)  # Open the camera(value depends on camera used, 0 for integrated camera. Check device list to confirm)
+        self.cap = cv2.VideoCapture(1)  # Open the camera(value depends on camera used, 0 for integrated camera. Check device list to confirm)
         if not self.cap.isOpened():
             print("Error: Couldn't open camera.")
             return
 
         # Set camera resolution (adjust as needed)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+        # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+        # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
         # Set up timer to read frames and update GUI
         timer = QTimer(self)
-        timer.timeout.connect(self.updateFrame)
-        timer.start(1000 // 60)  # Read frames every 33 ms (30 fps)
+        timer.timeout.connect(self.run)
+        global threadCamera
+        threadCamera = True
+        timer.start(1000 // 20)  # Read frames every 33 ms (30 fps)
 
     def startTimer(self):
         TIMER = int(3) 
@@ -91,8 +114,8 @@ class UI(QMainWindow):
                 bytesPerLine = ch * w
                 qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
                 # Convert QImage to QPixmap to display in QLabel
-                pixmap = QPixmap.fromImage(qImg)
-                self.cameraFrame.setPixmap(pixmap)
+                pixmap = qImg.scaled(640, 480, aspectRatioMode=Qt.KeepAspectRatio)
+                self.CameraFrame.emit(pixmap)
             cv2.waitKey(125) 
 
             # current time 
@@ -106,9 +129,7 @@ class UI(QMainWindow):
                 TIMER = TIMER-1
                 global startDetection
                 startDetection = 1
-                global startLSTM
-                startLSTM = 1
-    
+
     def mediapipe_detection(self, image, model):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
         image.flags.writeable = False                  # Image is no longer writeable
@@ -145,22 +166,19 @@ class UI(QMainWindow):
                                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2)
                                 ) 
 
-    actions = np.array(['ano_pangalan_mo', 'ako_si', 'kumusta_ka'])
+    actions = np.array(['Ako si', 'Ilang taon ka na', 'Sino', 'Sino ka'])
     model = Sequential()
-    model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(40,1662)))
-    model.add(LSTM(128, return_sequences=True, activation='relu'))
-    model.add(LSTM(64, return_sequences=False, activation='relu'))
-    model.add(Dense(64, activation='relu'))
-    model.add(Dense(32, activation='relu'))
+    model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
+    # model.add(LSTM(128, return_sequences=True, activation='relu'))
+    # model.add(LSTM(64, return_sequences=False, activation='relu'))
+    # model.add(Dense(64, activation='relu'))
+    model.add(Dense(16, activation='relu'))
     model.add(Dense(actions.shape[0], activation='softmax'))
-    model.load_weights('LSTM-mediapipe/action.h5')
+    model.load_weights('MP_Hyan/introduction.h5')
 
     colors = [(245,117,16), (117,245,16), (16,117,245)]
     def prob_viz(self, res, actions, input_frame, colors):
         output_frame = input_frame.copy()
-        for num, prob in enumerate(res):
-            cv2.rectangle(output_frame, (0,60+num*40), (int(prob*100), 90+num*40), colors[num], -1)
-            cv2.putText(output_frame, actions[num], (0, 85+num*40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
         return output_frame
 
     def extract_keypoints(self, results):
@@ -170,17 +188,21 @@ class UI(QMainWindow):
         rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
         return np.concatenate([pose, face, lh, rh])
 
-    def updateFrame(self):
+    def run(self):
         # 1. New detection variables
         sequence = []
         sentence = []
         predictions = []
         threshold = 0.5
+        global startDetection
+        startDetection = 0
+        global threadCamera
 
+        if threadCamera == True:
 
-        with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
-            while self.cap.isOpened():
-                for total_attempts in range(5):
+            with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+                while self.cap.isOpened():
+                    
                     TIMER = int(3) 
                     # Read feed
                     ret, frame = self.cap.read()
@@ -201,62 +223,66 @@ class UI(QMainWindow):
                         bytesPerLine = ch * w
                         qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
                         # Convert QImage to QPixmap to display in QLabel
-                        pixmap = QPixmap.fromImage(qImg)
-                        self.cameraFrame.setPixmap(pixmap)
+                        pixmap = qImg.scaled(640, 480, aspectRatioMode=Qt.KeepAspectRatio)
+                        self.CameraFrame.emit(pixmap)
                     k = cv2.waitKey(125) 
                     
-                    global startLSTM
-                    if startLSTM == 1:
-                        global startDetection
-                        if startDetection == 1:
-                            # Make detections
-                            ret, frame = self.cap.read()
-                            image, results = self.mediapipe_detection(frame, holistic)
-                            self.draw_styled_landmarks(image, results)
-                            # 2. Prediction logic
-                            keypoints = self.extract_keypoints(results)
+                    
+                    
+                    while (startDetection == 1):
+                        # Make detections
+                        ret, frame = self.cap.read()
+                        image, results = self.mediapipe_detection(frame, holistic)
+                        self.draw_styled_landmarks(image, results)
+                        
+                        if ret:
+                            # Resize frame
+                            image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
+                            # Convert frame to RGB format
+                            rgbImage = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                            
+                            
+                            # Convert RGB image to QImage
+                            h, w, ch = rgbImage.shape
+                            bytesPerLine = ch * w
+                            qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
+                            # Convert QImage to QPixmap to display in QLabel
+                            pixmap = qImg.scaled(640, 480, aspectRatioMode=Qt.KeepAspectRatio)
+                            self.CameraFrame.emit(pixmap)
+                        k = cv2.waitKey(1)
 
-                            sequence.append(keypoints)
-                            sequence = sequence[-40:]
+                        # 2. Prediction logic
+                        keypoints = self.extract_keypoints(results)
+
+                        sequence.append(keypoints)
+                        sequence = sequence[-40:]
+
+                        
+                        if len(sequence) == 40:
+                            res = self.model.predict(np.expand_dims(sequence, axis=0))[0]
+                            print(self.actions[np.argmax(res)])
+                            predictions.append(np.argmax(res))
+                            startDetection = 0
+                            sequence = []
+                            
+                            
+                        #3. Viz logic
+                            if np.unique(predictions[-10:])[0]==np.argmax(res): 
+                                if res[np.argmax(res)] > threshold: 
+                                    
+                                    if len(sentence) > 0: 
+                                        if self.actions[np.argmax(res)] != sentence[-1]:
+                                            sentence.append(self.actions[np.argmax(res)])
+                                    else:
+                                        sentence.append(self.actions[np.argmax(res)])
+
+                            if len(sentence) > 5: 
+                                sentence = sentence[-5:]
+                                
+
+                            # Viz probabilities
+                            image = self.prob_viz(res, self.actions, image, self.colors)
+
+                        # ret, image = self.cap.read()  # Read frame from camera
 
                             
-                            if len(sequence) == 40:
-                                res = self.model.predict(np.expand_dims(sequence, axis=0))[0]
-                                print(self.actions[np.argmax(res)])
-                                predictions.append(np.argmax(res))
-                                startDetection = 0
-                                sequence = []
-                                
-                                
-                            #3. Viz logic
-                                if np.unique(predictions[-10:])[0]==np.argmax(res): 
-                                    if res[np.argmax(res)] > threshold: 
-                                        
-                                        if len(sentence) > 0: 
-                                            if self.actions[np.argmax(res)] != sentence[-1]:
-                                                sentence.append(self.actions[np.argmax(res)])
-                                        else:
-                                            sentence.append(self.actions[np.argmax(res)])
-
-                                if len(sentence) > 5: 
-                                    sentence = sentence[-5:]
-                                    
-
-                                # Viz probabilities
-                                image = self.prob_viz(res, self.actions, image, self.colors)
-
-                            ret, image = self.cap.read()  # Read frame from camera
-                            if ret:
-                                # Resize frame
-                                image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
-                                # Convert frame to RGB format
-                                rgbImage = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                                
-                                
-                                # Convert RGB image to QImage
-                                h, w, ch = rgbImage.shape
-                                bytesPerLine = ch * w
-                                qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
-                                # Convert QImage to QPixmap to display in QLabel
-                                pixmap = QPixmap.fromImage(qImg)
-                                self.cameraFrame.setPixmap(pixmap)

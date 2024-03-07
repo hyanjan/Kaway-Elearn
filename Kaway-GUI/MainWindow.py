@@ -30,15 +30,6 @@ from assessments import *
 # initialize files and warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 path = os.getcwd()
-startLSTM = 0
-
-#initialize mediapipe
-mp_holistic = mp.solutions.holistic # Holistic model
-mp_drawing = mp.solutions.drawing_utils # Drawing utilities
-
-
-
-        
 
 
 # initialize the app
