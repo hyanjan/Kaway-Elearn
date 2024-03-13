@@ -53,11 +53,11 @@ def extract_keypoints(results):
     return np.concatenate([pose, face, lh, rh])
 
 # Path for exported data, numpy arrays
-path = "C:/Users/hyanx/Documents/Thesis/"
-DATA_PATH = os.path.join(path,'MP_Hyan') 
+path = "/Users/atp002332/Documents/GitHub/Kaway-Elearn"
+DATA_PATH = os.path.join(path,'MP_Joshua') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['Ako si', 'Ilang taon ka na', 'Sino', 'Sino ka'])
+actions = np.array(['Ako si', 'Anong pangalan mo', 'Bahay', 'Ingat ka','Kumusta ka','Magandang Gabi','Magandang Hapon','Magandang Umaga','Paalam','Pasensya na','Pinto','Salamat','Silid'])
 
 # Thirty videos worth of data
 no_sequences = 33
@@ -128,7 +128,7 @@ model.summary()
 
 
 #Save model
-model.save('C:/Users/hyanx/Documents/Thesis/MP_Hyan/introduction.h5')
+model.save('/Users/atp002332/Documents/GitHub/Kaway-Elearn/MP_Joshua/introduction.h5')
 
 
 # Real-time Test
