@@ -54,10 +54,10 @@ def extract_keypoints(results):
 
 # Path for exported data, numpy arrays
 path = "C:/Users/hyanx/Documents/Thesis/"
-DATA_PATH = os.path.join(path,'MP_Hyan') 
+DATA_PATH = os.path.join(path,'MP_HyanLetters') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['Ako si', 'Ilang taon ka na', 'Sino', 'Sino ka'])
+actions = np.array(['a', 'b', 'c', 'd', 'e', 'f'])
 
 # Thirty videos worth of data
 no_sequences = 33
@@ -107,9 +107,11 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dense
 from keras.callbacks import TensorBoard
 from keras.optimizers import AdamW
+from keras.callbacks import EarlyStopping
 
 log_dir = os.path.join(path, 'Logs-0.4')
-tb_callback = TensorBoard(log_dir=log_dir)
+# tb_callback = TensorBoard(log_dir=log_dir)
+earlystopping_callback = EarlyStopping(monitor='categorical_accuracy',verbose=1,min_delta=0.0001,patience=100,baseline=None)
 model = Sequential()
 del model
 model = Sequential()
@@ -122,13 +124,13 @@ model.add(Dense(actions.shape[0], activation='softmax'))
 
 #opt = SGD(lr=0.0001)
 model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
-model.fit(X_train, y_train, epochs=100, callbacks=[tb_callback])
+model.fit(X_train, y_train, epochs=2000, callbacks=[earlystopping_callback])
 model.summary()
 
 
 
 #Save model
-model.save('C:/Users/hyanx/Documents/Thesis/MP_Hyan/introduction.h5')
+model.save('C:/Users/hyanx/Documents/Thesis/MP_HyanLetters/letters_2.h5')
 
 
 # Real-time Test

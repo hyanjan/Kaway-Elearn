@@ -25,7 +25,8 @@ from keras.utils import to_categorical
 from scipy import stats
 
 #import functions
-from assessments import *
+# from assessments import *
+from assessments_static import *
 
 # initialize files and warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)

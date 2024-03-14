@@ -27,7 +27,6 @@ from scipy import stats
 #initialize mediapipe
 mp_holistic = mp.solutions.holistic # Holistic model
 mp_drawing = mp.solutions.drawing_utils # Drawing utilities
-startLSTM = 0
 
 class UI(QMainWindow):
     def __init__(self):
@@ -104,7 +103,7 @@ class Detection(QThread):
                         4, cv2.LINE_AA)
             if ret:
                 # Resize frame
-                image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
+                # image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
                 # Convert frame to RGB format
                 rgbImage = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 
@@ -114,7 +113,7 @@ class Detection(QThread):
                 bytesPerLine = ch * w
                 qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
                 # Convert QImage to QPixmap to display in QLabel
-                pixmap = qImg.scaled(640, 480, aspectRatioMode=Qt.KeepAspectRatio)
+                pixmap = qImg.scaled(960, 540, aspectRatioMode=Qt.KeepAspectRatio)
                 self.CameraFrame.emit(pixmap)
             cv2.waitKey(125) 
 
@@ -213,7 +212,7 @@ class Detection(QThread):
                     # Show to screen and wait for key to be pressed
                     if ret:
                         # Resize frame
-                        image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
+                        # image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
                         # Convert frame to RGB format
                         rgbImage = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                         
@@ -223,7 +222,7 @@ class Detection(QThread):
                         bytesPerLine = ch * w
                         qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
                         # Convert QImage to QPixmap to display in QLabel
-                        pixmap = qImg.scaled(640, 480, aspectRatioMode=Qt.KeepAspectRatio)
+                        pixmap = qImg.scaled(960, 540, aspectRatioMode=Qt.KeepAspectRatio)
                         self.CameraFrame.emit(pixmap)
                     k = cv2.waitKey(125) 
                     
@@ -237,7 +236,7 @@ class Detection(QThread):
                         
                         if ret:
                             # Resize frame
-                            image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
+                            # image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
                             # Convert frame to RGB format
                             rgbImage = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                             
@@ -247,7 +246,7 @@ class Detection(QThread):
                             bytesPerLine = ch * w
                             qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
                             # Convert QImage to QPixmap to display in QLabel
-                            pixmap = qImg.scaled(640, 480, aspectRatioMode=Qt.KeepAspectRatio)
+                            pixmap = qImg.scaled(960, 540, aspectRatioMode=Qt.KeepAspectRatio)
                             self.CameraFrame.emit(pixmap)
                         k = cv2.waitKey(1)
 
