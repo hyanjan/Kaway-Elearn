@@ -117,6 +117,7 @@ while cap.isOpened():
                 print("get out")
                 startDetection = 0
                 answer = []
+                answer_character = []
 
             cv2.imshow('OpenCV Feed', frame)
             cv2.waitKey(1)
