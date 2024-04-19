@@ -56,7 +56,7 @@ path = os.getcwd()
 DATA_PATH = os.path.join(path,'MP_Joshua') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['magandang gabi'])
+actions = np.array(['maraming salamat'])
 
 # Thirty videos worth of data
 no_sequences = 33
