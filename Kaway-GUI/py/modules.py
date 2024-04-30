@@ -12,6 +12,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 #import functions
 from assessments_static import UI
+from db import database
 
 
 # initialize files and warnings
@@ -37,7 +38,18 @@ class Modules(QWidget):
         # Load video file
         video_path = "Kaway-GUI/videos/test.mp4"
         self.loadVideo(video_path)
-        # self.play()  # Play the video automatically when page loads
+
+        # Define labels
+        self.moduleLabel = self.findChild(QLabel, "Module")
+        self.subtopicLabel = self.findChild(QLabel, "subtopic")
+        self.answerText = self.findChild(QLabel, 'AnswerText')
+        self.practiceButton = self.findChild(QLabel, 'PracticeNow')
+        lesson = self.getLesson()
+
+        # Rename labels
+        self.subtopicLabel.setText(database.getValue('module', database.findRowIDValue('right_answer', lesson)))
+        self.answerText.setText(lesson)
+
 
         # define buttons
         self.practiceButton = self.findChild(QPushButton, "PracticeNow")
@@ -49,13 +61,23 @@ class Modules(QWidget):
         self.playButton.clicked.connect(self.play)
         self.pauseButton.clicked.connect(self.pause)
         self.positionSlider.sliderMoved.connect(self.setPosition)
+        self.practiceButton.clicked.connect(self.practiceNow)
 
         self.mediaPlayer.setVideoOutput(self.videoWidget)
         self.mediaPlayer.positionChanged.connect(self.positionChanged)
         self.mediaPlayer.durationChanged.connect(self.durationChanged)
-        self.mediaPlayer.error.connect(self.handleError)
 
-        
+    def practiceNow(self):
+        from assessments_static import UI
+
+        practice = UI()
+        self.stacked_widget.addWidget(practice)
+        self.stacked_widget.setCurrentWidget(practice)
+
+    def getLesson(self):
+        from lessonsAlphabet import LessonsAlphabet
+        lesson = LessonsAlphabet.lessonName
+        return lesson      
     
     # define side tab buttons
     def gotoLessons(self):
@@ -99,9 +121,6 @@ class Modules(QWidget):
     def setPosition(self, position):
         self.mediaPlayer.setPosition(position)
 
-    def handleError(self):
-        self.playButton.setEnabled(False)
-        self.errorLabel.setText("Error: " + self.mediaPlayer.errorString())
 
     def loadVideo(self, video_path):
         media = QMediaContent(QUrl.fromLocalFile(video_path))
