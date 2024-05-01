@@ -447,7 +447,7 @@ background-color: rgb(251, 133, 0);
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
-          <widget class="QFrame" name="UpperFrame">
+          <widget class="QFrame" name="M1">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(142, 202, 230);
 border-radius: 32px
@@ -484,7 +484,7 @@ border-radius: 32px
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="AnswerText_8">
+             <widget class="QLabel" name="Subtopic1">
               <property name="font">
                <font>
                 <family>Inter</family>
@@ -510,7 +510,7 @@ border-radius: 32px
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="UpperFrame_2">
+          <widget class="QFrame" name="M2">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(142, 202, 230);
 border-radius: 32px
@@ -547,7 +547,7 @@ border-radius: 32px
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="AnswerText_9">
+             <widget class="QLabel" name="Subtopic2">
               <property name="font">
                <font>
                 <family>Inter</family>
@@ -573,7 +573,7 @@ border-radius: 32px
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="UpperFrame_3">
+          <widget class="QFrame" name="M3">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(142, 202, 230);
 border-radius: 32px
@@ -610,7 +610,7 @@ border-radius: 32px
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="AnswerText_10">
+             <widget class="QLabel" name="Subtopic3">
               <property name="font">
                <font>
                 <family>Inter</family>
@@ -636,7 +636,7 @@ border-radius: 32px
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="UpperFrame_4">
+          <widget class="QFrame" name="M4">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(142, 202, 230);
 border-radius: 32px
@@ -673,7 +673,7 @@ border-radius: 32px
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="AnswerText_11">
+             <widget class="QLabel" name="Subtopic4">
               <property name="font">
                <font>
                 <family>Inter</family>

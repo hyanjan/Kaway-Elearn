@@ -72,3 +72,16 @@ def putLesson(rowid, lesson):
 
     conn.commit()
     conn.close()
+
+def getLatestLesson():
+    conn = sqlite3.connect('Kaway-GUI\\py\\db\\users.db')
+    c = conn.cursor()
+
+    c.execute("SELECT latest_lesson from users")
+    value = c.fetchone()[0]
+
+    conn.commit()
+    conn.close()
+    return value
+
+print(getLatestLesson())

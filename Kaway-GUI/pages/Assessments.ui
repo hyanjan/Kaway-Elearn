@@ -492,7 +492,7 @@ border-radius: 32px
 </string>
        </property>
        <property name="text">
-        <string>Next Module</string>
+        <string>Complete</string>
        </property>
       </widget>
       <widget class="QWidget" name="verticalLayoutWidget_5">
@@ -501,7 +501,7 @@ border-radius: 32px
          <x>210</x>
          <y>0</y>
          <width>831</width>
-         <height>91</height>
+         <height>101</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_5">
