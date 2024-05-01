@@ -131,7 +131,7 @@ class Detection(QThread):
     threadCamera = False
 
     def startCamera(self):
-        self.cap = cv2.VideoCapture(1)  # Open the camera(value depends on camera used, 0 for integrated camera. Check device list to confirm)
+        self.cap = cv2.VideoCapture(0)  # Open the camera(value depends on camera used, 0 for integrated camera. Check device list to confirm)
         if not self.cap.isOpened():
             print("Error: Couldn't open camera.")
             return
