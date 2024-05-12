@@ -53,11 +53,11 @@ def extract_keypoints(results):
     return np.concatenate([pose, face, lh, rh])
 
 # Path for exported data, numpy arrays
-path = "C:/Users/hyanx/Documents/Thesis/"
-DATA_PATH = os.path.join(path,'MP_HyanLetters') 
+path = "C:/Users/gonza/Documents/GitHub/Kaway-Elearn/MP_Mod3"
+DATA_PATH = os.path.join(path,'MP_Mod3') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['a', 'b', 'c', 'd', 'e', 'f'])
+actions = np.array(['Ingat ka', 'Kumusta ka', 'Magandang araw', 'Magandang Gabi - pagbati', 'Magandang Hapon', 'Magandang Umaga', 'Maraming Salamat', 'Paalam', 'Pasensya na'])
 
 # Thirty videos worth of data
 no_sequences = 33
@@ -130,8 +130,8 @@ model.summary()
 
 
 #Save model
-model.save('C:/Users/hyanx/Documents/Thesis/MP_HyanLetters/letters_2.h5')
-
+#model.save('C:/Users/hyanx/Documents/Thesis/MP_HyanLetters/letters_2.h5')
+model.save('C:/Users/gonza/Documents/GitHub/Kaway-Elearn/MP_Mod3.h5')
 
 # Real-time Test
 # colors = [(245,117,16), (117,245,16), (16,117,245)]
