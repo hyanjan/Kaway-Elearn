@@ -59,7 +59,7 @@ def extract_keypoints(results):
     rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
     return np.concatenate([pose, face, lh, rh])
 
-actions = np.array(['Ingat ka', 'Kumusta ka', 'Magandang araw', 'Magandang Gabi - pagbati', 'Magandang Hapon', 'Magandang Umaga', 'Maraming Salamat', 'Paalam', 'Pasensya na'])
+actions = np.array(['Ingat ka', 'Kumusta ka', 'Magandang araw', 'Magandang Gabi', 'Magandang Hapon', 'Magandang Umaga', 'Maraming Salamat', 'Paalam', 'Pasensya na'])
 model = Sequential()
 model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
 # model.add(LSTM(128, return_sequences=True, activation='relu'))

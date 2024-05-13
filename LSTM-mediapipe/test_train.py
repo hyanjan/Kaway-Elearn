@@ -57,7 +57,7 @@ path = "C:/Users/gonza/Documents/GitHub/Kaway-Elearn/"
 DATA_PATH = os.path.join(path,'MP_Mod3') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['Ingat ka', 'Kumusta ka', 'Magandang araw', 'Magandang Gabi - pagbati', 'Magandang Hapon', 'Magandang Umaga', 'Maraming Salamat', 'Paalam', 'Pasensya na'])
+actions = np.array(['Ingat ka', 'Kumusta ka', 'Magandang araw', 'Magandang Gabi', 'Magandang Hapon', 'Magandang Umaga', 'Maraming Salamat', 'Paalam', 'Pasensya na'])
 
 # Thirty videos worth of data
 no_sequences = 33
