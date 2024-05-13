@@ -53,7 +53,7 @@ def extract_keypoints(results):
     return np.concatenate([pose, face, lh, rh])
 
 # Path for exported data, numpy arrays
-path = "C:/Users/gonza/Documents/GitHub/Kaway-Elearn/MP_Mod3"
+path = "C:/Users/gonza/Documents/GitHub/Kaway-Elearn/"
 DATA_PATH = os.path.join(path,'MP_Mod3') 
 print(DATA_PATH)
 # Actions that we try to detect
