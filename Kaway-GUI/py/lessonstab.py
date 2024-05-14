@@ -56,6 +56,7 @@ class Lessons(QWidget):
 
         # Define what buttons do
         self.lessonAlphabetButton.clicked.connect(self.gotoLessonsAlphabet)
+        self.moduleTwo.clicked.connect(self.gotoIntroduction)
         self.homeButton.clicked.connect(self.gotoHome)
 
         
@@ -68,6 +69,13 @@ class Lessons(QWidget):
         lessonsalphabet = LessonsAlphabet(self.stacked_widget)
         self.stacked_widget.addWidget(lessonsalphabet)
         self.stacked_widget.setCurrentWidget(lessonsalphabet)
+
+    def gotoIntroduction(self):
+        print("Button clicked!")
+        from introduction import Introduction
+        introduction = Introduction(self.stacked_widget)
+        self.stacked_widget.addWidget(introduction)
+        self.stacked_widget.setCurrentWidget(introduction)
 
     def gotoHome(self):
         from home import Home
@@ -94,3 +102,12 @@ class Lessons(QWidget):
             self.subTwo.setText("Module 2: Complete previous modules to unlock")
             self.subThree.setText("Module 3: Complete previous modules to unlock")
             self.subFour.setText("Module 4: Complete previous modules to unlock")
+
+        elif lesson > 28 & lesson < 33:
+            self.moduleThree.hide()
+            self.moduleFour.hide()
+
+            self.subThree.setText("Module 3: Complete previous modules to unlock")
+            self.subFour.setText("Module 4: Complete previous modules to unlock")
+
+        

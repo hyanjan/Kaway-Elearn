@@ -59,7 +59,7 @@ def extract_keypoints(results):
     rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
     return np.concatenate([pose, face, lh, rh])
 
-actions = np.array(['Ingat ka', 'Kumusta ka', 'Magandang araw', 'Magandang Gabi - pagbati', 'Magandang Hapon', 'Magandang Umaga', 'Maraming Salamat', 'Paalam', 'Pasensya na'])
+actions = np.array(['Ako si', 'Ano pangalan mo', 'Ilang taon ka na', 'Sino'])
 model = Sequential()
 model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
 # model.add(LSTM(128, return_sequences=True, activation='relu'))
@@ -67,7 +67,7 @@ model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,16
 # model.add(Dense(64, activation='relu'))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(actions.shape[0], activation='softmax'))
-model.load_weights(r'C:\Users\gonza\Documents\GitHub\Kaway-Elearn\MP_Mod3\MP_Mod3.h5')
+model.load_weights(r'C:\Users\hyanx\Documents\Thesis\MP_Hyan\introduction.h5')
 
 colors = [(245,117,16), (117,245,16), (16,117,245)]
 def prob_viz(res, actions, input_frame, colors):
@@ -91,6 +91,10 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
             TIMER = int(3) 
             # Read feed
             ret, frame = cap.read()
+            if not ret:
+                print("Error: Failed to capture frame")
+                continue
+
             image, results = mediapipe_detection(frame, holistic)
             draw_styled_landmarks(image, results)
 

@@ -42,9 +42,9 @@ hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 labels_dict = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J', 10: 'K', 11: 'L', 12: 'M', 13: 'N', 14: 'Ñ', 15: 'O', 16: 'P', 17: 'Q', 18: 'R', 19: 'S', 20: 'T', 21: 'U', 22: 'V', 23: 'W', 24: 'X', 25: 'Y', 26: 'Z'}
 
 class UI(QMainWindow):
-    def __init__(self):
+    def __init__(self, stacked_widget):
         super(UI, self).__init__()
-
+        self.stacked_widget = stacked_widget
         # Load the ui
         uic.loadUi("Kaway-GUI\pages\Assessments.ui", self)
         # Define the widgets here
@@ -62,6 +62,7 @@ class UI(QMainWindow):
         self.answerLogo.hide()
         self.nextModuleButton.hide()
         self.reviewButton.hide()
+        self.nextModuleButton.clicked.connect(self.gotoLessonsAlphabet)
         
 
         # Instance variable for capturing camera frames
@@ -86,6 +87,12 @@ class UI(QMainWindow):
         # Rename labels
         self.subtopicLabel.setText(database.getValue('module', database.findRowIDValue('right_answer', lesson)))
         self.answerText.setText(lesson)
+
+        # Define side buttons
+        self.homeButton = self.findChild(QPushButton, "Home")
+        self.homeButton.clicked.connect(self.gotoHome)
+        self.lessontabButton = self.findChild(QPushButton, "Lessons")
+        self.lessontabButton.clicked.connect(self.gotoLessons)
 
     def updateLabelText(self, text):
         self.rightAnswer.setText(text)
@@ -119,6 +126,29 @@ class UI(QMainWindow):
         from lessonsAlphabet import LessonsAlphabet
         lesson = LessonsAlphabet.lessonName
         return lesson
+    
+    def gotoHome(self):
+        from home import Home
+        print("Button clicked!")
+        home = Home(self.stacked_widget)
+        self.stacked_widget.addWidget(home)
+        self.stacked_widget.setCurrentWidget(home)   
+
+    def gotoLessons(self):
+        #import functions
+        from lessonstab import Lessons
+        
+        print("Button clicked!")
+        lessons = Lessons(self.stacked_widget)
+        self.widget.addWidget(lessons)
+        self.widget.setCurrentWidget(lessons) 
+
+    def gotoLessonsAlphabet(self):
+        print("Button clicked!")
+        from lessonsAlphabet import LessonsAlphabet
+        lessonsalphabet = LessonsAlphabet(self.stacked_widget)
+        self.stacked_widget.addWidget(lessonsalphabet)
+        self.stacked_widget.setCurrentWidget(lessonsalphabet)
 
         
 
@@ -277,7 +307,7 @@ class Detection(QThread):
                         count+=1
                         print(answer[-1])
 
-                        if len(answer) == 10:
+                        if len(answer) == 15:
                             if answer[3] == answer[9]:
                                 print(answer_character[9])
                                 # Emit the character string
@@ -286,8 +316,9 @@ class Detection(QThread):
                                 if self.getLesson() == answer_character[9]:
                                     self.CheckAnswer.emit(True)
                                 else:
+                                    self.LabelTextChanged.emit(answer_character[9])
                                     self.CheckAnswer.emit(False)
-                            elif answer_character[3] == '13' and answer_character[9] == '6':
+                            elif answer[3] == '13' and answer[9] == '6':
                                 print('NG')
                                 # Emit the 'NG' string
                                 self.LabelTextChanged.emit('NG')
@@ -296,6 +327,16 @@ class Detection(QThread):
                                     self.CheckAnswer.emit(True)
                                 else:
                                     self.CheckAnswer.emit(False)
+                            
+                            elif answer[12] == '14':
+                                print('Ñ')
+                                self.LabelTextChanged.emit('Ñ')
+
+                                if self.getLesson() == 'Ñ':
+                                    self.CheckAnswer.emit(True)
+                                else:
+                                    self.CheckAnswer.emit(False)
+
 
                         if len(answer) == 15:
                             print("get out")
