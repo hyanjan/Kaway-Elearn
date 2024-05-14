@@ -36,7 +36,10 @@ class Modules(QWidget):
         self.positionSlider = self.findChild(QSlider, "Slider")
 
         # Load video file
-        video_path = "Kaway-GUI/videos/test.mp4"
+        if database.getChosenLesson() == 'Ñ':
+            video_path = f"Kaway-GUI/videos/enye.mp4"
+        else:
+            video_path = f"Kaway-GUI/videos/{database.getChosenLesson()}.mp4"
         self.loadVideo(video_path)
 
         # Define labels
@@ -44,7 +47,7 @@ class Modules(QWidget):
         self.subtopicLabel = self.findChild(QLabel, "subtopic")
         self.answerText = self.findChild(QLabel, 'AnswerText')
         self.practiceButton = self.findChild(QLabel, 'PracticeNow')
-        lesson = self.getLesson()
+        lesson = database.getChosenLesson()
 
         # Rename labels
         self.subtopicLabel.setText(database.getValue('module', database.findRowIDValue('right_answer', lesson)))
@@ -70,14 +73,15 @@ class Modules(QWidget):
     def practiceNow(self):
         from assessments_static import UI
 
-        practice = UI()
+        practice = UI(self.stacked_widget)
         self.stacked_widget.addWidget(practice)
         self.stacked_widget.setCurrentWidget(practice)
+        self.mediaPlayer.stop()
 
-    def getLesson(self):
-        from lessonsAlphabet import LessonsAlphabet
-        lesson = LessonsAlphabet.lessonName
-        return lesson      
+    # def getLesson(self):
+    #     from lessonsAlphabet import LessonsAlphabet
+    #     lesson = LessonsAlphabet.lessonName
+    #     return lesson      
     
     # define side tab buttons
     def gotoLessons(self):
@@ -120,7 +124,6 @@ class Modules(QWidget):
 
     def setPosition(self, position):
         self.mediaPlayer.setPosition(position)
-
 
     def loadVideo(self, video_path):
         media = QMediaContent(QUrl.fromLocalFile(video_path))

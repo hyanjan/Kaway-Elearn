@@ -61,14 +61,12 @@ def getValue(column_name, rowid):
     
 print(getValue('module', 1))
 
-def putLesson(rowid, lesson):
+def putChosenLesson(lesson):
     conn = sqlite3.connect('Kaway-GUI\\py\\db\\users.db')
     c = conn.cursor()
 
-    c.execute()
-
     # Update the chosen_lesson column with the value of lesson for the specific rowid
-    c.execute("UPDATE your_table_name SET chosen_lesson = ? WHERE ROWID = ?", (lesson, rowid))
+    c.execute("UPDATE users SET chosen_lesson = ?", (lesson,))
 
     conn.commit()
     conn.close()
@@ -85,3 +83,15 @@ def getLatestLesson():
     return value
 
 print(getLatestLesson())
+
+def getChosenLesson():
+    conn = sqlite3.connect('Kaway-GUI\\py\\db\\users.db')
+    c = conn.cursor()
+
+    c.execute("SELECT chosen_lesson from users")
+    value = c.fetchone()[0]
+
+    conn.commit()
+    conn.close()
+    return value
+

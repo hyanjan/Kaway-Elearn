@@ -23,36 +23,87 @@ from keras.callbacks import TensorBoard
 from sklearn.model_selection import train_test_split
 from keras.utils import to_categorical
 from scipy import stats
+from db import database
 
 #initialize mediapipe
 mp_holistic = mp.solutions.holistic # Holistic model
 mp_drawing = mp.solutions.drawing_utils # Drawing utilities
 
 class UI(QMainWindow):
-    def __init__(self):
+    def __init__(self, stacked_widget):
         super(UI, self).__init__()
+        self.stacked_widget = stacked_widget
 
         # Load the ui
-        uic.loadUi("Kaway-GUI\pages\interface.ui", self)
+        uic.loadUi("Kaway-GUI\pages\Assessments.ui", self)
 
         # Define the widgets here
         self.cameraButton = self.findChild(QPushButton, "StartCamera")
         self.cameraFrame = self.findChild(QLabel, "CameraFrame")
         self.detectionButton = self.findChild(QPushButton, "StartDetection")
+        self.nextModuleButton = self.findChild(QPushButton, 'NextModule')
+        self.answerLogo = self.findChild(QLabel, 'Check')
+        self.reviewButton = self.findChild(QPushButton, 'ReviewButton')
+        self.cameraFrame = self.findChild(QLabel, "CameraFrame")
 
         # Define what widgets do
         self.cameraButton.clicked.connect(self.startCameraGUI)
         self.detectionButton.clicked.connect(self.startTimer)
+        self.answerLogo.hide()
+        self.nextModuleButton.hide()
+        self.reviewButton.hide()
+        self.nextModuleButton.clicked.connect(self.gotoLessons)
 
         # Instance variable for capturing camera frames
         self.cap = None
         self.Detection = Detection()
         self.Detection.CameraFrame.connect(self.UpdateFrame)
+        
         self.Detection.start()
 
+        # change page details
+        lesson = database.getChosenLesson()
+        self.rightAnswer = self.findChild(QLabel, 'UserAnswer')
+        self.rightAnswer.hide()
+        self.Detection.LabelTextChanged.connect(self.updateLabelText)
+        self.Detection.CheckAnswer.connect(self.checkAnswer)
+
+        # Define labels
+        self.moduleLabel = self.findChild(QLabel, "Module")
+        self.subtopicLabel = self.findChild(QLabel, "subtopic")
+        self.answerText = self.findChild(QLabel, 'AnswerText')
+
+        # Rename labels
+        self.subtopicLabel.setText(database.getValue('module', database.findRowIDValue('right_answer', lesson)))
+        self.answerText.setText(lesson)
+
+        # Define side buttons
+        self.homeButton = self.findChild(QPushButton, "Home")
+        self.homeButton.clicked.connect(self.gotoHome)
+        self.lessontabButton = self.findChild(QPushButton, "Lessons")
+        self.lessontabButton.clicked.connect(self.gotoLessons)
+
         
-        # Show app
-        self.show()
+        # # Show app
+        # self.show()
+
+    def updateLabelText(self, text):
+        self.rightAnswer.setText(text)
+
+    def checkAnswer(self, bool):
+        if bool == False:
+            self.rightAnswer.setStyleSheet('color: rgb(255, 0, 0)')
+            self.answerLogo.setPixmap(QPixmap.fromImage(QImage("Kaway-GUI\linear\cross.png")))
+            self.rightAnswer.show()
+            self.answerLogo.show()
+            self.reviewButton.show()
+        else:
+            self.rightAnswer.setStyleSheet('color: rgb(0, 255, 0)')
+            self.answerLogo.setPixmap(QPixmap.fromImage(QImage("Kaway-GUI\linear\check.png")))
+            self.nextModuleButton.show()
+            self.rightAnswer.show()
+            self.answerLogo.show()
+            self.reviewButton.hide()
 
     def startCameraGUI(self):
         self.Detection.startCamera()
@@ -63,16 +114,34 @@ class UI(QMainWindow):
     def startTimer(self):
         self.Detection.startTimer()
 
+    def gotoHome(self):
+        from home import Home
+        print("Button clicked!")
+        home = Home(self.stacked_widget)
+        self.stacked_widget.addWidget(home)
+        self.stacked_widget.setCurrentWidget(home)   
+
+    def gotoLessons(self):
+        #import functions
+        from lessonstab import Lessons
+        
+        print("Button clicked!")
+        lessons = Lessons(self.widget)
+        self.widget.addWidget(lessons)
+        self.widget.setCurrentWidget(lessons) 
+
         
 
 class Detection(QThread):
     #Initialize Class UI
     CameraFrame = pyqtSignal(QImage)
+    LabelTextChanged = pyqtSignal(str)
+    CheckAnswer = pyqtSignal(bool)
     global threadCamera
     threadCamera = False
 
     def startCamera(self):
-        self.cap = cv2.VideoCapture(1)  # Open the camera(value depends on camera used, 0 for integrated camera. Check device list to confirm)
+        self.cap = cv2.VideoCapture(0)  # Open the camera(value depends on camera used, 0 for integrated camera. Check device list to confirm)
         if not self.cap.isOpened():
             print("Error: Couldn't open camera.")
             return
@@ -165,7 +234,7 @@ class Detection(QThread):
                                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2)
                                 ) 
 
-    actions = np.array(['Ako si', 'Ilang taon ka na', 'Sino', 'Sino ka'])
+    actions = np.array(['Ako si', 'Ano pangalan mo', 'Ilang taon ka na', 'Sino'])
     model = Sequential()
     model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
     # model.add(LSTM(128, return_sequences=True, activation='relu'))
@@ -260,6 +329,17 @@ class Detection(QThread):
                         if len(sequence) == 40:
                             res = self.model.predict(np.expand_dims(sequence, axis=0))[0]
                             print(self.actions[np.argmax(res)])
+
+                            if self.actions[np.argmax(res)] == database.getChosenLesson():
+                                print('correct')
+                                self.LabelTextChanged.emit(self.actions[np.argmax(res)])
+                                self.CheckAnswer.emit(True)
+                            else:
+                                self.LabelTextChanged.emit(self.actions[np.argmax(res)])
+                                self.CheckAnswer.emit(False)
+                                
+                            
+
                             predictions.append(np.argmax(res))
                             startDetection = 0
                             sequence = []
