@@ -1,0 +1,110 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "UnauthorizedAccess-BlockUser",
+            "location": "eastus",
+            "tags": {
+                "LogicAppsCategory": "security"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "Microsoft_Sentinel_incident": {
+                            "type": "ApiConnectionWebhook",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                    }
+                                },
+                                "body": {
+                                    "callback_url": "@{listCallbackUrl()}"
+                                },
+                                "path": "/incident-creation"
+                            }
+                        }
+                    },
+                    "actions": {
+                        "Entities_-_Get_Accounts": {
+                            "runAfter": {
+                                "Send_an_email_(V2)": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "body": "@triggerBody()?['object']?['properties']?['relatedEntities']",
+                                "path": "/entities/account"
+                            }
+                        },
+                        "Send_an_email_(V2)": {
+                            "runAfter": {},
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['outlook']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "body": {
+                                    "To": "test@gmail.com",
+                                    "Subject": "[WARNING] Unauthorized User Maximum Attempts- Forbidden Request",
+                                    "Body": "<p>User has attempted multiple forbidden requests. User will be blocked. Check for further validity.</p>",
+                                    "Importance": "High"
+                                },
+                                "path": "/v2/Mail"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azuresentinel": {
+                                "id": "/subscriptions/f115e6bc-1411-4989-81a0-d5437538d38c/providers/Microsoft.Web/locations/eastus/managedApis/azuresentinel",
+                                "connectionId": "/subscriptions/f115e6bc-1411-4989-81a0-d5437538d38c/resourceGroups/Sentinel/providers/Microsoft.Web/connections/azuresentinel-UnauthorizedAccess-BlockUser",
+                                "connectionName": "azuresentinel-UnauthorizedAccess-BlockUser",
+                                "connectionProperties": {
+                                    "authentication": {
+                                        "type": "ManagedServiceIdentity"
+                                    }
+                                }
+                            },
+                            "outlook": {
+                                "id": "/subscriptions/f115e6bc-1411-4989-81a0-d5437538d38c/providers/Microsoft.Web/locations/eastus/managedApis/outlook",
+                                "connectionId": "/subscriptions/f115e6bc-1411-4989-81a0-d5437538d38c/resourceGroups/Sentinel/providers/Microsoft.Web/connections/outlook-1",
+                                "connectionName": "outlook-1"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

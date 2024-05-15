@@ -95,3 +95,18 @@ def getChosenLesson():
     conn.close()
     return value
 
+def updateLatest():
+    conn = sqlite3.connect('Kaway-GUI\\py\\db\\users.db')
+    c = conn.cursor()
+
+    c.execute("SELECT latest_lesson from users")
+    value = c.fetchone()[0]
+
+    new_value = value + 1
+
+    c.execute("UPDATE users SET latest_lesson = ?", (new_value,))
+
+
+    conn.commit()
+    conn.close()
+    return new_value

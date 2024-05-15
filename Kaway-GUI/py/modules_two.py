@@ -49,6 +49,7 @@ class Modules(QWidget):
         # Rename labels
         self.subtopicLabel.setText(database.getValue('module', database.findRowIDValue('right_answer', lesson)))
         self.answerText.setText(lesson)
+        self.changeModule()
 
 
         # define buttons
@@ -127,3 +128,10 @@ class Modules(QWidget):
         self.mediaPlayer.setMedia(media)
         self.mediaPlayer.play()
 
+    def changeModule(self):
+        if database.findRowIDValue('right_answer', database.getChosenLesson()) < 33:
+            self.moduleLabel.setText("Module 2")
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 33:
+            self.moduleLabel.setText("Module 3")
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) > 41:
+            self.moduleLabel.setText("Module 4") 

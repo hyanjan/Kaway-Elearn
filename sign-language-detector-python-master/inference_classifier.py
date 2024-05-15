@@ -7,7 +7,7 @@ import numpy as np
 model_dict = pickle.load(open('./data_letters/model.p', 'rb'))
 model = model_dict['model']
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils

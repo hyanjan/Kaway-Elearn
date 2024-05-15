@@ -9,23 +9,24 @@ from assessments_static import *
 from db import database
 from modules_two import Modules
 
-
-
-class Introduction(QWidget):
+class Greetings(QWidget):
     def __init__(self, stacked_widget):
-        super(Introduction, self).__init__()
+        super(Greetings, self).__init__()
         self.stacked_widget = stacked_widget
 
         # Load the ui
-        uic.loadUi("Kaway-GUI/pages/lessons_introduce_tab.ui", self)
-
-        lessonName = ''
+        uic.loadUi("Kaway-GUI/pages/lessons_greetings_tab.ui", self)
 
         # define a-z buttons
-        self.akosiButton = self.findChild(QPushButton, "AKOSI")
-        self.pangalanButton = self.findChild(QPushButton, "PANGALAN")
-        self.sinoButton = self.findChild(QPushButton, "SINO")
-        self.taonButton = self.findChild(QPushButton, "TAON")
+        self.umagaButton = self.findChild(QPushButton, "UMAGA")
+        self.haponButton = self.findChild(QPushButton, "HAPON")
+        self.gabiButton = self.findChild(QPushButton, "GABI")
+        self.arawButton = self.findChild(QPushButton, "ARAW")
+        self.kumustaButton = self.findChild(QPushButton, "KUMUSTA")
+        self.paalamButton = self.findChild(QPushButton, "PAALAM")
+        self.ingatButton = self.findChild(QPushButton, "INGAT")
+        self.salamatButton = self.findChild(QPushButton, "SALAMAT")
+        self.pasensyaButton = self.findChild(QPushButton, "PASENSYA")
 
         # Define side buttons
         self.homeButton = self.findChild(QPushButton, "Home")
@@ -34,10 +35,15 @@ class Introduction(QWidget):
         self.lessontabButton.clicked.connect(self.gotoLessons)
 
         # Define what buttons do 
-        self.akosiButton.clicked.connect(partial(self.gotoAssessment, 'Ako si'))
-        self.pangalanButton.clicked.connect(partial(self.gotoAssessment, 'Ano ang pangalan mo'))
-        self.sinoButton.clicked.connect(partial(self.gotoAssessment, 'Sino'))
-        self.taonButton.clicked.connect(partial(self.gotoAssessment, 'Ilang taon ka na'))
+        self.umagaButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Umaga'))
+        self.haponButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Hapon'))
+        self.gabiButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Gabi'))
+        self.arawButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Araw'))
+        self.kumustaButton.clicked.connect(partial(self.gotoAssessment, 'Kumusta ka'))
+        self.paalamButton.clicked.connect(partial(self.gotoAssessment, 'Paalam'))
+        self.ingatButton.clicked.connect(partial(self.gotoAssessment, 'Ingat ka'))
+        self.salamatButton.clicked.connect(partial(self.gotoAssessment, 'Maraming Salamat'))
+        self.pasensyaButton.clicked.connect(partial(self.gotoAssessment, 'Pasensya ka'))
 
         self.hideSubtopic(database.getLatestLesson())
 
@@ -67,10 +73,10 @@ class Introduction(QWidget):
         self.stacked_widget.setCurrentWidget(modules)
 
     def hideSubtopic(self, latest):
-        buttons = [self.akosiButton, self.pangalanButton, self.sinoButton, self.taonButton]
+        buttons = [self.umagaButton, self.haponButton, self.gabiButton, self.arawButton, self.kumustaButton, self.paalamButton, self.ingatButton, self.salamatButton, self.pasensyaButton]
 
         for index, button in enumerate(buttons):
-            comp = index + 28
+            comp = index + 32
             if comp < latest:
                 button.setEnabled(True)
             else:
