@@ -53,10 +53,17 @@ def extract_keypoints(results):
 
 # Path for exported data, numpy arrays
 path = os.getcwd()
+<<<<<<< Updated upstream
 DATA_PATH = os.path.join(path,'MP_Mod4') 
 print(DATA_PATH)
 # Actions that we try to detect
 actions = np.array(['Silid2'])
+=======
+DATA_PATH = os.path.join(path,'C:\THESIS\Kaway-Elearn\MP_Mod3(1)') 
+print(DATA_PATH)
+# Actions that we try to detect
+actions = np.array(['Pasensya na1'])
+>>>>>>> Stashed changes
 
 # Thirty videos worth of data
 no_sequences = 33

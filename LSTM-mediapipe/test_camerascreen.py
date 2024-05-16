@@ -67,7 +67,11 @@ model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,16
 # model.add(Dense(64, activation='relu'))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(actions.shape[0], activation='softmax'))
+<<<<<<< Updated upstream
 model.load_weights(r'C:\Users\hyanx\Documents\Thesis\MP_Hyan\introduction.h5')
+=======
+model.load_weights('C:\THESIS\Kaway-Elearn\MP_Mod3.h5')
+>>>>>>> Stashed changes
 
 colors = [(245,117,16), (117,245,16), (16,117,245)]
 def prob_viz(res, actions, input_frame, colors):

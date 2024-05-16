@@ -53,8 +53,13 @@ def extract_keypoints(results):
     return np.concatenate([pose, face, lh, rh])
 
 # Path for exported data, numpy arrays
+<<<<<<< Updated upstream
 path = "C:\\Users\\hyanx\\Documents\\Thesis\\"
 DATA_PATH = os.path.join(path,'MP_Hyan') 
+=======
+path = "C:\THESIS\Kaway-Elearn"
+DATA_PATH = os.path.join(path,'MP_Mod3') 
+>>>>>>> Stashed changes
 print(DATA_PATH)
 # Actions that we try to detect
 actions = np.array(['Ako si', 'Ano pangalan mo', 'Ilang taon ka na', 'Sino'])
@@ -131,7 +136,11 @@ model.summary()
 
 #Save model
 #model.save('C:/Users/hyanx/Documents/Thesis/MP_HyanLetters/letters_2.h5')
+<<<<<<< Updated upstream
 model.save(r'C:\Users\hyanx\Documents\Thesis\MP_Hyan\introduction.h5')
+=======
+model.save('C:\THESIS\Kaway-Elearn\MP_Mod3.h5')
+>>>>>>> Stashed changes
 
 # Real-time Test
 # colors = [(245,117,16), (117,245,16), (16,117,245)]
