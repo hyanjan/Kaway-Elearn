@@ -57,7 +57,7 @@ path = "C:\\Users\\gonza\\Documents\\GitHub\\Kaway-Elearn"
 DATA_PATH = os.path.join(path,'MP_Mod4B') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['Pinto', 'Sala', 'Silid', 'Ube'])
+actions = np.array(['Dilaw', 'Guro', 'Kusina', 'Ube'])
 
 # Thirty videos worth of data
 no_sequences = 33
@@ -116,10 +116,10 @@ earlystopping_callback = EarlyStopping(monitor='categorical_accuracy',verbose=1,
 model = Sequential()
 del model
 model = Sequential()
-model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(40,1662)))
-model.add(LSTM(128, return_sequences=True, activation='relu'))
-model.add(LSTM(64, return_sequences=False, activation='relu'))
-model.add(Dense(64, activation='relu'))
+model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
+# model.add(LSTM(128, return_sequences=True, activation='relu'))
+# model.add(LSTM(64, return_sequences=False, activation='relu'))
+# model.add(Dense(64, activation='relu'))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(actions.shape[0], activation='softmax'))
 
