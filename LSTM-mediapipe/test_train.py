@@ -115,10 +115,10 @@ earlystopping_callback = EarlyStopping(monitor='categorical_accuracy',verbose=1,
 model = Sequential()
 del model
 model = Sequential()
-model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
-# model.add(LSTM(128, return_sequences=True, activation='relu'))
-# model.add(LSTM(64, return_sequences=False, activation='relu'))
-# model.add(Dense(64, activation='relu'))
+model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(40,1662)))
+model.add(LSTM(128, return_sequences=True, activation='relu'))
+model.add(LSTM(64, return_sequences=False, activation='relu'))
+model.add(Dense(64, activation='relu'))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(actions.shape[0], activation='softmax'))
 

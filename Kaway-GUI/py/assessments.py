@@ -148,10 +148,18 @@ class UI(QMainWindow):
             introduction = Introduction(self.stacked_widget)
             self.stacked_widget.addWidget(introduction)
             self.stacked_widget.setCurrentWidget(introduction) 
-        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 33:
-            self.moduleLabel.setText("Module 3")
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 32:
+            self.Detection.stopCamera()
+            from greetings import Greetings
+            greetings = Greetings(self.stacked_widget)
+            self.stacked_widget.addWidget(greetings)
+            self.stacked_widget.setCurrentWidget(greetings) 
         elif database.findRowIDValue('right_answer', database.getChosenLesson()) > 41:
-            self.moduleLabel.setText("Module 4") 
+            self.Detection.stopCamera()
+            from vocab import Vocab
+            vocab = Vocab(self.stacked_widget)
+            self.stacked_widget.addWidget(vocab)
+            self.stacked_widget.setCurrentWidget(vocab) 
     
 
             
@@ -188,7 +196,8 @@ class Detection(QThread):
     def stopCamera(self):
         if self.cap and self.cap.isOpened():
             self.cap.release()
-        self.timer.stop()
+            self.timer.stop()
+        
 
     def startTimer(self):
         TIMER = int(3) 
@@ -266,8 +275,31 @@ class Detection(QThread):
                                 mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=4), 
                                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2)
                                 ) 
+    
+    def defineWords():
+        if database.findRowIDValue('right_answer', database.getChosenLesson()) < 33:
+            actions = np.array(['Ako si', 'Ano ang pangalan mo', 'Ilang taon ka na', 'Sino'])
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 32:
+            actions = np.array(['Ingat ka', 'Kumusta ka', 'Magandang Araw', 'Magandang Gabi', 'Magandang Hapon', 'Magandang Umaga', 'Maraming Salamat', 'Paalam', 'Pasensya na'])
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) > 41:
+            actions = np.array(['Bahay', 'Dilaw', 'Guro', 'Kailan', 'Kusina', 'Pinto', 'Sala', 'Silid', 'Ube'])
+        
+        return actions
+    
+    def definemodel():
+        if database.findRowIDValue('right_answer', database.getChosenLesson()) < 33:
+            model = 'Kaway-GUI/model/introduction.h5'
+            return model
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 33:
+            model = 'Kaway-GUI/model/greetings.h5'
+            return model
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) > 41:
+            model = 'MP_Hyan/introduction.h5'
+            return model
+        
+        
 
-    actions = np.array(['Ako si', 'Ano ang pangalan mo', 'Ilang taon ka na', 'Sino'])
+    actions = defineWords()
     model = Sequential()
     model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
     # model.add(LSTM(128, return_sequences=True, activation='relu'))
@@ -275,7 +307,7 @@ class Detection(QThread):
     # model.add(Dense(64, activation='relu'))
     model.add(Dense(16, activation='relu'))
     model.add(Dense(actions.shape[0], activation='softmax'))
-    model.load_weights('MP_Hyan/introduction.h5')
+    model.load_weights(definemodel())
 
     colors = [(245,117,16), (117,245,16), (16,117,245)]
     def prob_viz(self, res, actions, input_frame, colors):

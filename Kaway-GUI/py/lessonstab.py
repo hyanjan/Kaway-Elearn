@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-import sys
 import warnings
 import os
 
@@ -79,10 +78,7 @@ class Lessons(QWidget):
         self.stacked_widget.setCurrentWidget(home)    
 
     def gotoLessons(self):
-        #import functions
         from lessonstab import Lessons
-        
-        print("Button clicked!")
         lessons = Lessons(self.stacked_widget)
         self.stacked_widget.addWidget(lessons)
         self.stacked_widget.setCurrentWidget(lessons)
