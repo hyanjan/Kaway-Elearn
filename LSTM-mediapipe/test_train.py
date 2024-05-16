@@ -53,11 +53,11 @@ def extract_keypoints(results):
     return np.concatenate([pose, face, lh, rh])
 
 # Path for exported data, numpy arrays
-path = "C:\\Users\\hyanx\\Documents\\Thesis\\"
-DATA_PATH = os.path.join(path,'MP_Hyan') 
+path = "C:\\Users\\gonza\\Documents\\GitHub\\Kaway-Elearn"
+DATA_PATH = os.path.join(path,'MP_Mod4B') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['Ako si', 'Ano pangalan mo', 'Ilang taon ka na', 'Sino'])
+actions = np.array(['Pinto', 'Sala', 'Silid', 'Ube'])
 
 # Thirty videos worth of data
 no_sequences = 33
@@ -80,6 +80,7 @@ for action in actions:
 #TRAINING STARTS HERE
 #TRAINING STARTS HERE
 from sklearn.model_selection import train_test_split
+from keras.layers import LSTM, Dense, Dropout
 from keras.utils import to_categorical
 from keras.optimizers import SGD
 
@@ -115,10 +116,10 @@ earlystopping_callback = EarlyStopping(monitor='categorical_accuracy',verbose=1,
 model = Sequential()
 del model
 model = Sequential()
-model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
-# model.add(LSTM(128, return_sequences=True, activation='relu'))
-# model.add(LSTM(64, return_sequences=False, activation='relu'))
-# model.add(Dense(64, activation='relu'))
+model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(40,1662)))
+model.add(LSTM(128, return_sequences=True, activation='relu'))
+model.add(LSTM(64, return_sequences=False, activation='relu'))
+model.add(Dense(64, activation='relu'))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(actions.shape[0], activation='softmax'))
 
@@ -127,11 +128,10 @@ model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categ
 model.fit(X_train, y_train, epochs=2000, callbacks=[earlystopping_callback])
 model.summary()
 
-
-
 #Save model
 #model.save('C:/Users/hyanx/Documents/Thesis/MP_HyanLetters/letters_2.h5')
-model.save(r'C:\Users\hyanx\Documents\Thesis\MP_Hyan\introduction.h5')
+#model.save(r'C:\Users\hyanx\Documents\Thesis\MP_Hyan\introduction.h5')
+model.save(r'C:\Users\gonza\Documents\GitHub\Kaway-Elearn\MP_Mod4B\vocabB.h5')
 
 # Real-time Test
 # colors = [(245,117,16), (117,245,16), (16,117,245)]

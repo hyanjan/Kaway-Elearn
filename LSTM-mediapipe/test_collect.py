@@ -56,7 +56,7 @@ path = os.getcwd()
 DATA_PATH = os.path.join(path,'MP_Mod4') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['Silid2'])
+actions = np.array(['Kailan2'])
 
 # Thirty videos worth of data
 no_sequences = 33
