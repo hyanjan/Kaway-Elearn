@@ -429,6 +429,9 @@ border-radius: 32px
              <bold>true</bold>
             </font>
            </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
            <property name="styleSheet">
             <string notr="true">color: rgb(255, 255, 255);</string>
            </property>
@@ -623,7 +626,7 @@ border-radius: 32px
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>
-              <widget class="QLabel" name="AnswerText_8">
+              <widget class="QPushButton" name="ContinueOne">
                <property name="font">
                 <font>
                  <family>Inter</family>
@@ -631,19 +634,19 @@ border-radius: 32px
                  <bold>true</bold>
                 </font>
                </property>
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
                <property name="styleSheet">
                 <string notr="true">color: rgb(255, 255, 255);</string>
                </property>
                <property name="text">
                 <string>Module 1: Alphabet</string>
                </property>
-               <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-               </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="AnswerText_9">
+              <widget class="QLabel" name="SubContinueOne">
                <property name="font">
                 <font>
                  <family>HoloLens MDL2 Assets</family>
@@ -700,7 +703,7 @@ border-radius: 32px
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_9">
              <item>
-              <widget class="QLabel" name="AnswerText_10">
+              <widget class="QPushButton" name="ContinueTwo">
                <property name="font">
                 <font>
                  <family>Inter</family>
@@ -714,13 +717,10 @@ border-radius: 32px
                <property name="text">
                 <string>Module 2: Introduction</string>
                </property>
-               <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-               </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="AnswerText_11">
+              <widget class="QLabel" name="SubContinueTwo">
                <property name="font">
                 <font>
                  <family>HoloLens MDL2 Assets</family>

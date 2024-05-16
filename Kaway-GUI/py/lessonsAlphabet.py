@@ -102,8 +102,8 @@ class LessonsAlphabet(QWidget):
         
         print("Button clicked!")
         lessons = Lessons(self.stacked_widget)
-        self.widget.addWidget(lessons)
-        self.widget.setCurrentWidget(lessons) 
+        self.stacked_widget.addWidget(lessons)
+        self.stacked_widget.setCurrentWidget(lessons) 
 
     def gotoAssessment(self, value):
         LessonsAlphabet.lessonName = value
@@ -126,3 +126,4 @@ class LessonsAlphabet(QWidget):
             else:
                 button.setEnabled(False)
                 button.setText("Complete previous subtopics first")
+                button.setStyleSheet('color: rgb(128, 128, 128)')

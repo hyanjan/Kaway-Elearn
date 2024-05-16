@@ -63,13 +63,12 @@ class UI(QMainWindow):
         self.nextModuleButton.hide()
         self.reviewButton.hide()
         self.nextModuleButton.clicked.connect(self.gotoLessonsAlphabet)
-        
 
         # Instance variable for capturing camera frames
         self.cap = None
         self.Detection = Detection()
         self.Detection.CameraFrame.connect(self.UpdateFrame)
-        
+
         self.Detection.start()
 
         # change page details
@@ -98,7 +97,7 @@ class UI(QMainWindow):
         self.rightAnswer.setText(text)
 
     def checkAnswer(self, bool):
-        if bool == False:
+        if not bool:
             self.rightAnswer.setStyleSheet('color: rgb(255, 0, 0)')
             self.answerLogo.setPixmap(QPixmap.fromImage(QImage("Kaway-GUI\linear\cross.png")))
             self.rightAnswer.show()
@@ -112,10 +111,9 @@ class UI(QMainWindow):
             self.answerLogo.show()
             self.reviewButton.hide()
 
-
     def startCameraGUI(self):
         self.Detection.startCamera()
-        
+
     def UpdateFrame(self, img):
         self.cameraFrame.setPixmap(QPixmap.fromImage(img))
 
@@ -126,42 +124,50 @@ class UI(QMainWindow):
         from lessonsAlphabet import LessonsAlphabet
         lesson = LessonsAlphabet.lessonName
         return lesson
-    
+
     def gotoHome(self):
         from home import Home
         print("Button clicked!")
+        self.Detection.stopCamera()
         home = Home(self.stacked_widget)
         self.stacked_widget.addWidget(home)
-        self.stacked_widget.setCurrentWidget(home)   
+        self.stacked_widget.setCurrentWidget(home)
 
     def gotoLessons(self):
         #import functions
         from lessonstab import Lessons
-        
-        print("Button clicked!")
+
+
+        self.Detection.stopCamera()
         lessons = Lessons(self.stacked_widget)
-        self.widget.addWidget(lessons)
-        self.widget.setCurrentWidget(lessons) 
+        self.stacked_widget.addWidget(lessons)
+        self.stacked_widget.setCurrentWidget(lessons)
 
     def gotoLessonsAlphabet(self):
-        print("Button clicked!")
+        if database.findRowIDValue('right_answer', database.getChosenLesson()) == database.getLatestLesson():
+            database.updateLatest()
+
+        self.Detection.stopCamera()
         from lessonsAlphabet import LessonsAlphabet
         lessonsalphabet = LessonsAlphabet(self.stacked_widget)
         self.stacked_widget.addWidget(lessonsalphabet)
         self.stacked_widget.setCurrentWidget(lessonsalphabet)
 
-        
 
 class Detection(QThread):
-    #Initialize Class UI
+    # Initialize Class UI
     CameraFrame = pyqtSignal(QImage)
     LabelTextChanged = pyqtSignal(str)
     CheckAnswer = pyqtSignal(bool)
     global threadCamera
     threadCamera = False
 
+    def __init__(self):
+        super().__init__()
+        self.cap = None
+
     def startCamera(self):
-        self.cap = cv2.VideoCapture(0)  # Open the camera(value depends on camera used, 0 for integrated camera. Check device list to confirm)
+        self.cap = cv2.VideoCapture(0)  # Open the camera (0 for integrated camera, check device list to confirm)
         if not self.cap.isOpened():
             print("Error: Couldn't open camera.")
             return
@@ -171,32 +177,36 @@ class Detection(QThread):
         # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
         # Set up timer to read frames and update GUI
-        timer = QTimer(self)
-        timer.timeout.connect(self.run)
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.run)
         global threadCamera
         threadCamera = True
-        timer.start(1000 // 20)  # Read frames every 33 ms (30 fps)
+        self.timer.start(1000 // 20)  # Read frames every 33 ms (30 fps)
+
+    def stopCamera(self):
+        if self.cap and self.cap.isOpened():
+            self.cap.release()
+        self.timer.stop()
 
     def startTimer(self):
-        TIMER = int(3) 
-        prev = time.time()                
-        while TIMER >= 0: 
+        TIMER = int(3)
+        prev = time.time()
+        while TIMER >= 0:
             ret, image = self.cap.read()
-            # Display countdown on each frame 
-            # specify the font and draw the 
-            # countdown using puttext 
-            font = cv2.FONT_HERSHEY_SIMPLEX 
-            cv2.putText(image, str(TIMER),  
-                        (200, 250), font, 
-                        7, (0, 255, 255), 
+            # Display countdown on each frame
+            # specify the font and draw the
+            # countdown using puttext
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            cv2.putText(image, str(TIMER),
+                        (200, 250), font,
+                        7, (0, 255, 255),
                         4, cv2.LINE_AA)
             if ret:
                 # Resize frame
                 # image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
                 # Convert frame to RGB format
                 rgbImage = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                
-                
+
                 # Convert RGB image to QImage
                 h, w, ch = rgbImage.shape
                 bytesPerLine = ch * w
@@ -204,16 +214,16 @@ class Detection(QThread):
                 # Convert QImage to QPixmap to display in QLabel
                 pixmap = qImg.scaled(960, 540, aspectRatioMode=Qt.KeepAspectRatio)
                 self.CameraFrame.emit(pixmap)
-            cv2.waitKey(125) 
+            cv2.waitKey(125)
 
-            # current time 
-            cur = time.time() 
+            # current time
+            cur = time.time()
 
-            # Update and keep track of Countdown 
-            # if time elapsed is one second  
-            # then decrease the counter 
-            if cur-prev >= 1: 
-                prev = cur 
+            # Update and keep track of Countdown
+            # if time elapsed is one second
+            # then decrease the counter
+            if cur-prev >= 1:
+                prev = cur
                 TIMER = TIMER-1
                 global startDetection
                 startDetection = 1
@@ -227,11 +237,8 @@ class Detection(QThread):
         answer = []
         answer_character = []
 
-
         if threadCamera == True:
-            while self.cap.isOpened():
-                
-                TIMER = int(3) 
+            while self.cap and self.cap.isOpened():
                 # Read feed
                 ret, frame = self.cap.read()
 
@@ -241,8 +248,7 @@ class Detection(QThread):
                     # image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
                     # Convert frame to RGB format
                     rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                    
-                    
+
                     # Convert RGB image to QImage
                     h, w, ch = rgbImage.shape
                     bytesPerLine = ch * w
@@ -250,7 +256,7 @@ class Detection(QThread):
                     # Convert QImage to QPixmap to display in QLabel
                     pixmap = qImg.scaled(960, 540, aspectRatioMode=Qt.KeepAspectRatio)
                     self.CameraFrame.emit(pixmap)
-                k = cv2.waitKey(125) 
+                k = cv2.waitKey(125)
 
                 data_aux = []
                 x_ = []
@@ -266,13 +272,13 @@ class Detection(QThread):
 
                     results = hands.process(frame_rgb)
                     if results.multi_hand_landmarks:
-                        for hand_landmarks in results.multi_hand_landmarks:
-                            mp_drawing.draw_landmarks(
-                                frame,  # image to draw
-                                hand_landmarks,  # model output
-                                mp_hands.HAND_CONNECTIONS,  # hand connections
-                                mp_drawing_styles.get_default_hand_landmarks_style(),
-                                mp_drawing_styles.get_default_hand_connections_style())
+                        # for hand_landmarks in results.multi_hand_landmarks:
+                        #     mp_drawing.draw_landmarks(
+                        #         frame,  # image to draw
+                        #         hand_landmarks,  # model output
+                        #         mp_hands.HAND_CONNECTIONS,  # hand connections
+                        #         mp_drawing_styles.get_default_hand_landmarks_style(),
+                        #         mp_drawing_styles.get_default_hand_connections_style())
 
                         for hand_landmarks in results.multi_hand_landmarks:
                             for i in range(len(hand_landmarks.landmark)):
@@ -298,9 +304,9 @@ class Detection(QThread):
 
                         predicted_character = labels_dict[int(prediction[0])]
 
-                        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
-                        cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3,
-                                    cv2.LINE_AA)
+                        # cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
+                        # cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3,
+                        #             cv2.LINE_AA)
                     
                         answer.append(prediction)
                         answer_character.append(predicted_character)
@@ -337,6 +343,24 @@ class Detection(QThread):
                                 else:
                                     self.CheckAnswer.emit(False)
 
+                            elif answer[12] == '9':
+                                print('Ñ')
+                                self.LabelTextChanged.emit('J')
+
+                                if self.getLesson() == 'J':
+                                    self.CheckAnswer.emit(True)
+                                else:
+                                    self.CheckAnswer.emit(False)
+
+                            elif answer[12] == '26':
+                                print('Ñ')
+                                self.LabelTextChanged.emit('Z')
+
+                                if self.getLesson() == 'Z':
+                                    self.CheckAnswer.emit(True)
+                                else:
+                                    self.CheckAnswer.emit(False)                            
+
 
                         if len(answer) == 15:
                             print("get out")
@@ -362,7 +386,6 @@ class Detection(QThread):
                         cv2.waitKey(1)
 
             # Release the video capture and destroy OpenCV windows
-            self.cap.release()
-            cv2.destroyAllWindows()
-
+            if self.cap and self.cap.isOpened():
+                self.cap.release()
                                                     

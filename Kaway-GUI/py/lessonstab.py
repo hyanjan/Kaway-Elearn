@@ -3,26 +3,8 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-import sys
 import warnings
 import os
-import cv2
-from functools import partial
-
-#Detection req import
-import cv2
-import numpy as np
-import os
-from matplotlib import pyplot as plt
-import time
-import datetime
-import mediapipe as mp
-from keras.models import Sequential
-from keras.layers import LSTM, Dense
-from keras.callbacks import TensorBoard
-from sklearn.model_selection import train_test_split
-from keras.utils import to_categorical
-from scipy import stats
 
 #import functions
 from lessonsAlphabet import LessonsAlphabet
@@ -57,6 +39,8 @@ class Lessons(QWidget):
         # Define what buttons do
         self.lessonAlphabetButton.clicked.connect(self.gotoLessonsAlphabet)
         self.moduleTwo.clicked.connect(self.gotoIntroduction)
+        self.moduleThree.clicked.connect(self.gotoGreetings)
+        self.moduleFour.clicked.connect(self.gotoVocab)
         self.homeButton.clicked.connect(self.gotoHome)
 
         
@@ -65,30 +49,36 @@ class Lessons(QWidget):
     
     # define side tab buttons
     def gotoLessonsAlphabet(self):
-        print("Button clicked!")
         lessonsalphabet = LessonsAlphabet(self.stacked_widget)
         self.stacked_widget.addWidget(lessonsalphabet)
         self.stacked_widget.setCurrentWidget(lessonsalphabet)
 
     def gotoIntroduction(self):
-        print("Button clicked!")
         from introduction import Introduction
         introduction = Introduction(self.stacked_widget)
         self.stacked_widget.addWidget(introduction)
         self.stacked_widget.setCurrentWidget(introduction)
 
+    def gotoGreetings(self):
+        from greetings import Greetings
+        greetings = Greetings(self.stacked_widget)
+        self.stacked_widget.addWidget(greetings)
+        self.stacked_widget.setCurrentWidget(greetings)    
+
+    def gotoVocab(self):
+        from vocab import Vocab
+        vocab = Vocab(self.stacked_widget)
+        self.stacked_widget.addWidget(vocab)
+        self.stacked_widget.setCurrentWidget(vocab)      
+
     def gotoHome(self):
         from home import Home
-        print("Button clicked!")
         home = Home(self.stacked_widget)
         self.stacked_widget.addWidget(home)
         self.stacked_widget.setCurrentWidget(home)    
 
     def gotoLessons(self):
-        #import functions
         from lessonstab import Lessons
-        
-        print("Button clicked!")
         lessons = Lessons(self.stacked_widget)
         self.stacked_widget.addWidget(lessons)
         self.stacked_widget.setCurrentWidget(lessons)
@@ -100,14 +90,30 @@ class Lessons(QWidget):
             self.moduleFour.hide()
 
             self.subTwo.setText("Module 2: Complete previous modules to unlock")
+            self.subTwo.setStyleSheet('color: rgb(128, 128, 128)')
             self.subThree.setText("Module 3: Complete previous modules to unlock")
+            self.subThree.setStyleSheet('color: rgb(128, 128, 128)')
             self.subFour.setText("Module 4: Complete previous modules to unlock")
+            self.subFour.setStyleSheet('color: rgb(128, 128, 128)')
 
-        elif lesson > 28 & lesson < 33:
+        elif lesson > 28 and lesson < 33:
             self.moduleThree.hide()
             self.moduleFour.hide()
 
             self.subThree.setText("Module 3: Complete previous modules to unlock")
+            self.subThree.setStyleSheet('color: rgb(128, 128, 128)')
             self.subFour.setText("Module 4: Complete previous modules to unlock")
+            self.subFour.setStyleSheet('color: rgb(128, 128, 128)')
+
+        elif lesson > 32 and lesson < 42:
+            self.moduleFour.hide()
+
+            self.subFour.setText("Module 4: Complete previous modules to unlock")
+            self.subFour.setStyleSheet('color: rgb(128, 128, 128)')
+
+        elif lesson > 41:
+            return
+
+
 
         

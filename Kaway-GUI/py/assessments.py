@@ -52,7 +52,7 @@ class UI(QMainWindow):
         self.answerLogo.hide()
         self.nextModuleButton.hide()
         self.reviewButton.hide()
-        self.nextModuleButton.clicked.connect(self.gotoLessons)
+        self.nextModuleButton.clicked.connect(self.gotoSubtopics)
 
         # Instance variable for capturing camera frames
         self.cap = None
@@ -76,6 +76,8 @@ class UI(QMainWindow):
         # Rename labels
         self.subtopicLabel.setText(database.getValue('module', database.findRowIDValue('right_answer', lesson)))
         self.answerText.setText(lesson)
+        self.changeModule()
+        
 
         # Define side buttons
         self.homeButton = self.findChild(QPushButton, "Home")
@@ -117,6 +119,7 @@ class UI(QMainWindow):
     def gotoHome(self):
         from home import Home
         print("Button clicked!")
+        self.Detection.stopCamera()
         home = Home(self.stacked_widget)
         self.stacked_widget.addWidget(home)
         self.stacked_widget.setCurrentWidget(home)   
@@ -124,13 +127,42 @@ class UI(QMainWindow):
     def gotoLessons(self):
         #import functions
         from lessonstab import Lessons
-        
+        self.Detection.stopCamera()
         print("Button clicked!")
-        lessons = Lessons(self.widget)
-        self.widget.addWidget(lessons)
-        self.widget.setCurrentWidget(lessons) 
+        lessons = Lessons(self.stacked_widget)
+        self.stacked_widget.addWidget(lessons)
+        self.stacked_widget.setCurrentWidget(lessons) 
 
-        
+    def changeModule(self):
+        if database.findRowIDValue('right_answer', database.getChosenLesson()) < 33:
+            self.moduleLabel.setText("Module 2")
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 33:
+            self.moduleLabel.setText("Module 3")
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) > 41:
+            self.moduleLabel.setText("Module 4") 
+
+    def gotoSubtopics(self):
+        if database.findRowIDValue('right_answer', database.getChosenLesson()) < 33:
+            self.Detection.stopCamera()
+            from introduction import Introduction
+            introduction = Introduction(self.stacked_widget)
+            self.stacked_widget.addWidget(introduction)
+            self.stacked_widget.setCurrentWidget(introduction) 
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 32:
+            self.Detection.stopCamera()
+            from greetings import Greetings
+            greetings = Greetings(self.stacked_widget)
+            self.stacked_widget.addWidget(greetings)
+            self.stacked_widget.setCurrentWidget(greetings) 
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) > 41:
+            self.Detection.stopCamera()
+            from vocab import Vocab
+            vocab = Vocab(self.stacked_widget)
+            self.stacked_widget.addWidget(vocab)
+            self.stacked_widget.setCurrentWidget(vocab) 
+    
+
+            
 
 class Detection(QThread):
     #Initialize Class UI
@@ -139,6 +171,10 @@ class Detection(QThread):
     CheckAnswer = pyqtSignal(bool)
     global threadCamera
     threadCamera = False
+
+    def __init__(self):
+        super(Detection, self).__init__()
+        self.cap = None  # Initialize cap to None
 
     def startCamera(self):
         self.cap = cv2.VideoCapture(0)  # Open the camera(value depends on camera used, 0 for integrated camera. Check device list to confirm)
@@ -151,11 +187,17 @@ class Detection(QThread):
         # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
         # Set up timer to read frames and update GUI
-        timer = QTimer(self)
-        timer.timeout.connect(self.run)
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.run)
         global threadCamera
         threadCamera = True
-        timer.start(1000 // 20)  # Read frames every 33 ms (30 fps)
+        self.timer.start(1000 // 20)  # Read frames every 33 ms (30 fps)
+    
+    def stopCamera(self):
+        if self.cap and self.cap.isOpened():
+            self.cap.release()
+            self.timer.stop()
+        
 
     def startTimer(self):
         TIMER = int(3) 
@@ -233,8 +275,31 @@ class Detection(QThread):
                                 mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=4), 
                                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2)
                                 ) 
+    
+    def defineWords():
+        if database.findRowIDValue('right_answer', database.getChosenLesson()) < 33:
+            actions = np.array(['Ako si', 'Ano ang pangalan mo', 'Ilang taon ka na', 'Sino'])
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 32:
+            actions = np.array(['Ingat ka', 'Kumusta ka', 'Magandang Araw', 'Magandang Gabi', 'Magandang Hapon', 'Magandang Umaga', 'Maraming Salamat', 'Paalam', 'Pasensya na'])
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) > 41:
+            actions = np.array(['Bahay', 'Dilaw', 'Guro', 'Kailan', 'Kusina', 'Pinto', 'Sala', 'Silid', 'Ube'])
+        
+        return actions
+    
+    def definemodel():
+        if database.findRowIDValue('right_answer', database.getChosenLesson()) < 33:
+            model = 'Kaway-GUI/model/introduction.h5'
+            return model
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 33:
+            model = 'Kaway-GUI/model/greetings.h5'
+            return model
+        elif database.findRowIDValue('right_answer', database.getChosenLesson()) > 41:
+            model = 'MP_Hyan/introduction.h5'
+            return model
+        
+        
 
-    actions = np.array(['Ako si', 'Ano pangalan mo', 'Ilang taon ka na', 'Sino'])
+    actions = defineWords()
     model = Sequential()
     model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
     # model.add(LSTM(128, return_sequences=True, activation='relu'))
@@ -242,7 +307,7 @@ class Detection(QThread):
     # model.add(Dense(64, activation='relu'))
     model.add(Dense(16, activation='relu'))
     model.add(Dense(actions.shape[0], activation='softmax'))
-    model.load_weights('MP_Hyan/introduction.h5')
+    model.load_weights(definemodel())
 
     colors = [(245,117,16), (117,245,16), (16,117,245)]
     def prob_viz(self, res, actions, input_frame, colors):
@@ -265,6 +330,9 @@ class Detection(QThread):
         global startDetection
         startDetection = 0
         global threadCamera
+
+        if self.cap is None:
+            return  # Exit if the camera was not successfully initialized
 
         if threadCamera == True:
 
@@ -363,5 +431,7 @@ class Detection(QThread):
                             image = self.prob_viz(res, self.actions, image, self.colors)
 
                         # ret, image = self.cap.read()  # Read frame from camera
-
+            # Release the video capture and destroy OpenCV windows
+            if self.cap and self.cap.isOpened():
+                self.cap.release()
                             

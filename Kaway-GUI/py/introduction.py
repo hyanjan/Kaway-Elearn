@@ -35,9 +35,9 @@ class Introduction(QWidget):
 
         # Define what buttons do 
         self.akosiButton.clicked.connect(partial(self.gotoAssessment, 'Ako si'))
-        self.pangalanButton.clicked.connect(partial(self.gotoAssessment, 'Ano ang pangalan mo?'))
-        self.sinoButton.clicked.connect(partial(self.gotoAssessment, 'Sino ka?'))
-        self.taonButton.clicked.connect(partial(self.gotoAssessment, 'Ilang taon ka na?'))
+        self.pangalanButton.clicked.connect(partial(self.gotoAssessment, 'Ano ang pangalan mo'))
+        self.sinoButton.clicked.connect(partial(self.gotoAssessment, 'Sino'))
+        self.taonButton.clicked.connect(partial(self.gotoAssessment, 'Ilang taon ka na'))
 
         self.hideSubtopic(database.getLatestLesson())
 
@@ -54,8 +54,8 @@ class Introduction(QWidget):
         
         print("Button clicked!")
         lessons = Lessons(self.stacked_widget)
-        self.widget.addWidget(lessons)
-        self.widget.setCurrentWidget(lessons) 
+        self.stacked_widget.addWidget(lessons)
+        self.stacked_widget.setCurrentWidget(lessons) 
 
     def gotoAssessment(self, value):
         print(value)
@@ -76,3 +76,4 @@ class Introduction(QWidget):
             else:
                 button.setEnabled(False)
                 button.setText("Complete previous subtopics first")
+                button.setStyleSheet('color: rgb(128, 128, 128)')
