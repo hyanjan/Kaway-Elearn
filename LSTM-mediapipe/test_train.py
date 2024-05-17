@@ -54,10 +54,10 @@ def extract_keypoints(results):
 
 # Path for exported data, numpy arrays
 path = "C:\\Users\\gonza\\Documents\\GitHub\\Kaway-Elearn"
-DATA_PATH = os.path.join(path,'MP_Mod4A') 
+DATA_PATH = os.path.join(path,'MP_Mod4C') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['Bahay', 'Sala', 'Silid'])
+actions = np.array(['Guro', 'Kailan', 'Pinto'])
 
 # Thirty videos worth of data
 no_sequences = 33
@@ -131,7 +131,7 @@ model.summary()
 #Save model
 #model.save('C:/Users/hyanx/Documents/Thesis/MP_HyanLetters/letters_2.h5')
 #model.save(r'C:\Users\hyanx\Documents\Thesis\MP_Hyan\introduction.h5')
-model.save(r'C:\Users\gonza\Documents\GitHub\Kaway-Elearn\MP_Mod4A\vocabA.h5')
+model.save(r'C:\Users\gonza\Documents\GitHub\Kaway-Elearn\MP_Mod4C\vocabC.h5')
 
 # Real-time Test
 # colors = [(245,117,16), (117,245,16), (16,117,245)]
