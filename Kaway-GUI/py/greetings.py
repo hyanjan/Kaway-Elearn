@@ -5,7 +5,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from functools import partial
 
-from assessments_static import *
+
 from db import database
 from modules_two import Modules
 
@@ -38,12 +38,12 @@ class Greetings(QWidget):
         self.umagaButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Umaga'))
         self.haponButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Hapon'))
         self.gabiButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Gabi'))
-        self.arawButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Araw'))
+        self.arawButton.clicked.connect(partial(self.gotoAssessment, 'Magandang araw'))
         self.kumustaButton.clicked.connect(partial(self.gotoAssessment, 'Kumusta ka'))
         self.paalamButton.clicked.connect(partial(self.gotoAssessment, 'Paalam'))
         self.ingatButton.clicked.connect(partial(self.gotoAssessment, 'Ingat ka'))
         self.salamatButton.clicked.connect(partial(self.gotoAssessment, 'Maraming Salamat'))
-        self.pasensyaButton.clicked.connect(partial(self.gotoAssessment, 'Pasensya ka'))
+        self.pasensyaButton.clicked.connect(partial(self.gotoAssessment, 'Pasensya na'))
 
         self.hideSubtopic(database.getLatestLesson())
 

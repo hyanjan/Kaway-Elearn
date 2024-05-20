@@ -45,6 +45,8 @@ class UI(QMainWindow):
         self.answerLogo = self.findChild(QLabel, 'Check')
         self.reviewButton = self.findChild(QPushButton, 'ReviewButton')
         self.cameraFrame = self.findChild(QLabel, "CameraFrame")
+        self.Error = self.findChild(QFrame, "Error")
+        self.ErrorText = self.findChild(QLabel, "ErrorText")
 
         # Define what widgets do
         self.cameraButton.clicked.connect(self.startCameraGUI)
@@ -53,6 +55,10 @@ class UI(QMainWindow):
         self.nextModuleButton.hide()
         self.reviewButton.hide()
         self.nextModuleButton.clicked.connect(self.gotoSubtopics)
+        self.Error.hide()
+
+        # Initialize Detection
+        self.initDetection()
 
         # Instance variable for capturing camera frames
         self.cap = None
@@ -67,6 +73,8 @@ class UI(QMainWindow):
         self.rightAnswer.hide()
         self.Detection.LabelTextChanged.connect(self.updateLabelText)
         self.Detection.CheckAnswer.connect(self.checkAnswer)
+        self.Detection.loading.connect(self.loading)
+        self.reviewButton.clicked.connect(self.goReview)
 
         # Define labels
         self.moduleLabel = self.findChild(QLabel, "Module")
@@ -85,9 +93,38 @@ class UI(QMainWindow):
         self.lessontabButton = self.findChild(QPushButton, "Lessons")
         self.lessontabButton.clicked.connect(self.gotoLessons)
 
+        #check module
+        moduleCheck = False
+
+    def initDetection(self):
+        self.Detection = Detection()
+        self.Detection.CameraFrame.connect(self.UpdateFrame)
+        self.Detection.LabelTextChanged.connect(self.updateLabelText)
+        self.Detection.CheckAnswer.connect(self.checkAnswer)
+        self.Detection.loading.connect(self.loading)
+        self.Detection.start()
+
         
-        # # Show app
-        # self.show()
+    def goReview(self):
+        from modules import Modules
+
+        self.Detection.stopCamera()
+        modules = Modules(self.stacked_widget)
+        self.stacked_widget.addWidget(modules)
+        self.stacked_widget.setCurrentWidget(modules)
+
+    def loading(self, bool):
+        # Loading the GIF 
+        self.movie = QMovie(r"Kaway-GUI\linear\loading.gif") 
+        self.answerLogo.setMovie(self.movie)
+        self.movie.start()
+        self.answerLogo.show()
+        self.rightAnswer.show()
+        self.reviewButton.hide()
+        self.rightAnswer.setStyleSheet('color: rgb(0, 255, 0)')
+        self.rightAnswer.setText("Detecting")
+
+
 
     def updateLabelText(self, text):
         self.rightAnswer.setText(text)
@@ -108,13 +145,19 @@ class UI(QMainWindow):
             self.reviewButton.hide()
 
     def startCameraGUI(self):
+        self.Error.hide()
         self.Detection.startCamera()
         
     def UpdateFrame(self, img):
         self.cameraFrame.setPixmap(QPixmap.fromImage(img))
 
     def startTimer(self):
-        self.Detection.startTimer()
+        if not self.Detection.cap or not self.Detection.cap.isOpened():
+            self.Error.show()
+            self.ErrorText.setText("Error: Open Camera First")
+            return
+        else:
+            self.Detection.startTimer()
 
     def gotoHome(self):
         from home import Home
@@ -142,6 +185,9 @@ class UI(QMainWindow):
             self.moduleLabel.setText("Module 4") 
 
     def gotoSubtopics(self):
+        if database.findRowIDValue('right_answer', database.getChosenLesson()) == database.getLatestLesson():
+            database.updateLatest()
+
         if database.findRowIDValue('right_answer', database.getChosenLesson()) < 33:
             self.Detection.stopCamera()
             from introduction import Introduction
@@ -169,22 +215,25 @@ class Detection(QThread):
     CameraFrame = pyqtSignal(QImage)
     LabelTextChanged = pyqtSignal(str)
     CheckAnswer = pyqtSignal(bool)
+    loading = pyqtSignal(bool)
     global threadCamera
     threadCamera = False
 
     def __init__(self):
         super(Detection, self).__init__()
         self.cap = None  # Initialize cap to None
+        self.running = False  # Flag to indicate if the thread should be running
+        self.actions = self.defineWords()
+        self.model = self.initializeModel()
+        
 
     def startCamera(self):
-        self.cap = cv2.VideoCapture(0)  # Open the camera(value depends on camera used, 0 for integrated camera. Check device list to confirm)
+        self.cap = cv2.VideoCapture(0)  # Open the camera
         if not self.cap.isOpened():
             print("Error: Couldn't open camera.")
             return
 
-        # Set camera resolution (adjust as needed)
-        # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-        # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+        self.running = True  # Set the running flag to True
 
         # Set up timer to read frames and update GUI
         self.timer = QTimer(self)
@@ -194,9 +243,12 @@ class Detection(QThread):
         self.timer.start(1000 // 20)  # Read frames every 33 ms (30 fps)
     
     def stopCamera(self):
+        self.running = False  # Set the running flag to False
         if self.cap and self.cap.isOpened():
             self.cap.release()
             self.timer.stop()
+        self.wait()  # Wait for the thread to finish
+            
         
 
     def startTimer(self):
@@ -226,6 +278,9 @@ class Detection(QThread):
                 # Convert QImage to QPixmap to display in QLabel
                 pixmap = qImg.scaled(960, 540, aspectRatioMode=Qt.KeepAspectRatio)
                 self.CameraFrame.emit(pixmap)
+
+                if TIMER == 0:
+                    self.loading.emit(True)
             cv2.waitKey(125) 
 
             # current time 
@@ -239,6 +294,8 @@ class Detection(QThread):
                 TIMER = TIMER-1
                 global startDetection
                 startDetection = 1
+
+
 
     def mediapipe_detection(self, image, model):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
@@ -276,38 +333,54 @@ class Detection(QThread):
                                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2)
                                 ) 
     
-    def defineWords():
-        if database.findRowIDValue('right_answer', database.getChosenLesson()) < 33:
+    def defineWords(self):
+        vocabA = [42, 44, 45]
+        vocabB = [48, 49, 50]
+        vocabC = [43, 46, 47]
+        lesson = database.findRowIDValue('right_answer', database.getChosenLesson())
+        if lesson < 33:
             actions = np.array(['Ako si', 'Ano ang pangalan mo', 'Ilang taon ka na', 'Sino'])
-        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 32:
+        elif lesson < 42 and lesson > 32:
             actions = np.array(['Ingat ka', 'Kumusta ka', 'Magandang Araw', 'Magandang Gabi', 'Magandang Hapon', 'Magandang Umaga', 'Maraming Salamat', 'Paalam', 'Pasensya na'])
-        elif database.findRowIDValue('right_answer', database.getChosenLesson()) > 41:
-            actions = np.array(['Bahay', 'Dilaw', 'Guro', 'Kailan', 'Kusina', 'Pinto', 'Sala', 'Silid', 'Ube'])
+        elif lesson in vocabA:
+            actions = np.array(['Bahay', 'Sala', 'Silid'])
+        elif lesson in vocabB:
+            actions = np.array(['Dilaw', 'Kusina', 'Ube'])
+        elif lesson in vocabC:
+            actions = np.array(['Guro', 'Kailan', 'Pinto'])
         
         return actions
     
-    def definemodel():
-        if database.findRowIDValue('right_answer', database.getChosenLesson()) < 33:
+    def definemodel(self):
+        vocabA = [42, 44, 45]
+        vocabB = [48, 49, 50]
+        vocabC = [43, 46, 47]
+        lesson = database.findRowIDValue('right_answer', database.getChosenLesson())
+        if lesson < 33:
             model = 'Kaway-GUI/model/introduction.h5'
             return model
-        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 33:
+        elif lesson < 42 and lesson > 32:
             model = 'Kaway-GUI/model/greetings.h5'
             return model
-        elif database.findRowIDValue('right_answer', database.getChosenLesson()) > 41:
-            model = 'MP_Hyan/introduction.h5'
+        elif lesson in vocabA:
+            model = 'Kaway-GUI/model/vocabA.h5'
+            return model
+        elif lesson in vocabB:
+            model = 'Kaway-GUI/model/vocabB.h5'
+            return model
+        elif lesson in vocabC:
+            model = 'Kaway-GUI/model/vocabC.h5'
             return model
         
         
 
-    actions = defineWords()
-    model = Sequential()
-    model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
-    # model.add(LSTM(128, return_sequences=True, activation='relu'))
-    # model.add(LSTM(64, return_sequences=False, activation='relu'))
-    # model.add(Dense(64, activation='relu'))
-    model.add(Dense(16, activation='relu'))
-    model.add(Dense(actions.shape[0], activation='softmax'))
-    model.load_weights(definemodel())
+    def initializeModel(self):
+        model = Sequential()
+        model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40, 1662)))
+        model.add(Dense(16, activation='relu'))
+        model.add(Dense(self.actions.shape[0], activation='softmax'))
+        model.load_weights(self.definemodel())
+        return model
 
     colors = [(245,117,16), (117,245,16), (16,117,245)]
     def prob_viz(self, res, actions, input_frame, colors):
@@ -336,8 +409,10 @@ class Detection(QThread):
 
         if threadCamera == True:
 
+
+
             with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
-                while self.cap.isOpened():
+                while self.cap.isOpened() and self.running:
                     
                     TIMER = int(3) 
                     # Read feed
@@ -395,6 +470,7 @@ class Detection(QThread):
 
                         
                         if len(sequence) == 40:
+        
                             res = self.model.predict(np.expand_dims(sequence, axis=0))[0]
                             print(self.actions[np.argmax(res)])
 

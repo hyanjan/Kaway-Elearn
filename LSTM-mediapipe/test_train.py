@@ -53,11 +53,11 @@ def extract_keypoints(results):
     return np.concatenate([pose, face, lh, rh])
 
 # Path for exported data, numpy arrays
-path = "C:\\Users\\gonza\\Documents\\GitHub\\Kaway-Elearn"
-DATA_PATH = os.path.join(path,'MP_Mod4B') 
+path = "C:\\Users\\hyanx\\Documents\\Thesis\\"
+DATA_PATH = os.path.join(path,'MP_Mod4A') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['Dilaw', 'Guro', 'Kusina', 'Ube'])
+actions = np.array(['Bahay', 'Kailan', 'Pinto', 'Sala', 'Silid'])
 
 # Thirty videos worth of data
 no_sequences = 33
@@ -112,7 +112,7 @@ from keras.callbacks import EarlyStopping
 
 log_dir = os.path.join(path, 'Logs-0.4')
 # tb_callback = TensorBoard(log_dir=log_dir)
-earlystopping_callback = EarlyStopping(monitor='categorical_accuracy',verbose=1,min_delta=0.0001,patience=50,baseline=None)
+earlystopping_callback = EarlyStopping(monitor='categorical_accuracy',verbose=1,min_delta=0.0001,patience=100,baseline=None)
 model = Sequential()
 del model
 model = Sequential()
@@ -131,7 +131,7 @@ model.summary()
 #Save model
 #model.save('C:/Users/hyanx/Documents/Thesis/MP_HyanLetters/letters_2.h5')
 #model.save(r'C:\Users\hyanx\Documents\Thesis\MP_Hyan\introduction.h5')
-model.save(r'C:\Users\gonza\Documents\GitHub\Kaway-Elearn\MP_Mod4B\vocabB.h5')
+model.save(r'C:\Users\hyanx\Documents\Thesis\Kaway-GUI\model\vocab_A.h5')
 
 # Real-time Test
 # colors = [(245,117,16), (117,245,16), (16,117,245)]

@@ -1,36 +1,44 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QStackedWidget
-from PyQt5.uic import loadUi
-from nextwidget import NextWidget
+import sys 
+from PyQt5 import QtCore, QtGui, QtWidgets 
+from PyQt5.QtGui import QMovie 
+from PyQt5.QtCore import Qt 
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Main Window")
 
-        # Load the UI file
-        loadUi("Kaway-GUI\pages\lessonstab.ui", self)
+class LoadingGif(object): 
 
-        # Create a stacked widget
-        self.stacked_widget = QStackedWidget(self.centralwidget)
+	def mainUI(self, FrontWindow): 
+		FrontWindow.setObjectName("FTwindow") 
+		FrontWindow.resize(320, 300) 
+		self.centralwidget = QtWidgets.QWidget(FrontWindow) 
+		self.centralwidget.setObjectName("main-widget") 
 
-        # Create pages
-        self.page1 = QWidget()
-        self.page1_layout = QVBoxLayout(self.page1)
-        self.pushButton = QPushButton("Go to Next Page")
-        self.page1_layout.addWidget(self.pushButton)
-        self.pushButton.clicked.connect(self.go_to_next_page)
-        self.stacked_widget.addWidget(self.page1)
+		# Label Create 
+		self.label = QtWidgets.QLabel(self.centralwidget) 
+		self.label.setGeometry(QtCore.QRect(25, 25, 200, 200)) 
+		self.label.setMinimumSize(QtCore.QSize(250, 250)) 
+		self.label.setMaximumSize(QtCore.QSize(250, 250)) 
+		self.label.setObjectName("lb1") 
+		FrontWindow.setCentralWidget(self.centralwidget) 
 
-        # Show the main window
-        self.show()
+		# Loading the GIF 
+		self.movie = QMovie(r"C:\Users\hyanx\Documents\Thesis\Kaway-GUI\linear\loading.gif") 
+		self.label.setMovie(self.movie) 
 
-    def go_to_next_page(self):
-        self.next_widget = NextWidget()
-        self.stacked_widget.addWidget(self.next_widget)
-        self.stacked_widget.setCurrentWidget(self.next_widget)
+		self.startAnimation() 
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    sys.exit(app.exec_())
+	# Start Animation 
+
+	def startAnimation(self): 
+		self.movie.start() 
+
+	# Stop Animation(According to need) 
+	def stopAnimation(self): 
+		self.movie.stop() 
+
+
+app = QtWidgets.QApplication(sys.argv) 
+window = QtWidgets.QMainWindow() 
+demo = LoadingGif() 
+demo.mainUI(window) 
+window.show() 
+sys.exit(app.exec_()) 

@@ -55,6 +55,8 @@ class UI(QMainWindow):
         self.answerLogo = self.findChild(QLabel, 'Check')
         self.reviewButton = self.findChild(QPushButton, 'ReviewButton')
         self.cameraFrame = self.findChild(QLabel, "CameraFrame")
+        self.Error = self.findChild(QFrame, "Error")
+        self.ErrorText = self.findChild(QLabel, "ErrorText")
 
         # Define what widgets do
         self.cameraButton.clicked.connect(self.startCameraGUI)
@@ -63,6 +65,7 @@ class UI(QMainWindow):
         self.nextModuleButton.hide()
         self.reviewButton.hide()
         self.nextModuleButton.clicked.connect(self.gotoLessonsAlphabet)
+        self.Error.hide()
 
         # Instance variable for capturing camera frames
         self.cap = None
@@ -77,12 +80,16 @@ class UI(QMainWindow):
         self.rightAnswer.hide()
         self.Detection.LabelTextChanged.connect(self.updateLabelText)
         self.Detection.CheckAnswer.connect(self.checkAnswer)
+        self.Detection.loading.connect(self.loading)
+        self.reviewButton.clicked.connect(self.goReview)
+
 
         # Define labels
         self.moduleLabel = self.findChild(QLabel, "Module")
         self.subtopicLabel = self.findChild(QLabel, "subtopic")
         self.answerText = self.findChild(QLabel, 'AnswerText')
 
+  
         # Rename labels
         self.subtopicLabel.setText(database.getValue('module', database.findRowIDValue('right_answer', lesson)))
         self.answerText.setText(lesson)
@@ -92,6 +99,28 @@ class UI(QMainWindow):
         self.homeButton.clicked.connect(self.gotoHome)
         self.lessontabButton = self.findChild(QPushButton, "Lessons")
         self.lessontabButton.clicked.connect(self.gotoLessons)
+
+
+    def goReview(self):
+        from modules import Modules
+
+        self.Detection.stopCamera()
+        modules = Modules(self.stacked_widget)
+        self.stacked_widget.addWidget(modules)
+        self.stacked_widget.setCurrentWidget(modules)
+    
+    def loading(self, bool):
+        # Loading the GIF 
+        self.movie = QMovie(r"Kaway-GUI\linear\loading.gif") 
+        self.answerLogo.setMovie(self.movie)
+        self.movie.start()
+        self.answerLogo.show()
+        self.rightAnswer.show()
+        self.reviewButton.hide()
+        self.rightAnswer.setStyleSheet('color: rgb(0, 255, 0)')
+        self.rightAnswer.setText("Detecting")
+        self.answerLogo.setMovie(self.movie)
+        self.movie.start()
 
     def updateLabelText(self, text):
         self.rightAnswer.setText(text)
@@ -112,13 +141,19 @@ class UI(QMainWindow):
             self.reviewButton.hide()
 
     def startCameraGUI(self):
+        self.Error.hide()
         self.Detection.startCamera()
 
     def UpdateFrame(self, img):
         self.cameraFrame.setPixmap(QPixmap.fromImage(img))
 
     def startTimer(self):
-        self.Detection.startTimer()
+        if not self.Detection.cap or not self.Detection.cap.isOpened():
+            self.Error.show()
+            self.ErrorText.setText("Error: Open Camera First")
+            return
+        else:
+            self.Detection.startTimer()
 
     def getLesson(self):
         from lessonsAlphabet import LessonsAlphabet
@@ -154,11 +189,14 @@ class UI(QMainWindow):
         self.stacked_widget.setCurrentWidget(lessonsalphabet)
 
 
+
+
 class Detection(QThread):
     # Initialize Class UI
     CameraFrame = pyqtSignal(QImage)
     LabelTextChanged = pyqtSignal(str)
     CheckAnswer = pyqtSignal(bool)
+    loading = pyqtSignal(bool)
     global threadCamera
     threadCamera = False
 
@@ -227,6 +265,10 @@ class Detection(QThread):
                 TIMER = TIMER-1
                 global startDetection
                 startDetection = 1
+
+            if TIMER == 0:
+                self.loading.emit(True)
+                
 
     def getLesson(self):
         from lessonsAlphabet import LessonsAlphabet
@@ -314,6 +356,7 @@ class Detection(QThread):
                         print(answer[-1])
 
                         if len(answer) == 15:
+                            
                             if answer[3] == answer[9]:
                                 print(answer_character[9])
                                 # Emit the character string

@@ -607,7 +607,7 @@ border-radius: 32px
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="UpperFrame_4">
+          <widget class="QFrame" name="UpperFrame_7">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(142, 202, 230);
 border-radius: 32px
@@ -619,9 +619,9 @@ border-radius: 32px
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_11">
+           <layout class="QVBoxLayout" name="verticalLayout_14">
             <item>
-             <widget class="QPushButton" name="KUSINA">
+             <widget class="QPushButton" name="KAILAN">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -639,7 +639,7 @@ border-radius: 32px
                <string notr="true">color: rgb(255, 255, 255);</string>
               </property>
               <property name="text">
-               <string>Subtopic 5: Kusina</string>
+               <string>Subtopic 5: Kailan</string>
               </property>
              </widget>
             </item>
@@ -687,7 +687,7 @@ border-radius: 32px
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="UpperFrame_7">
+          <widget class="QFrame" name="UpperFrame_4">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(142, 202, 230);
 border-radius: 32px
@@ -699,9 +699,9 @@ border-radius: 32px
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_14">
+           <layout class="QVBoxLayout" name="verticalLayout_11">
             <item>
-             <widget class="QPushButton" name="KAILAN">
+             <widget class="QPushButton" name="KUSINA">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -719,7 +719,7 @@ border-radius: 32px
                <string notr="true">color: rgb(255, 255, 255);</string>
               </property>
               <property name="text">
-               <string>Subtopic 7: Kailan</string>
+               <string>Subtopic 7: Kusina</string>
               </property>
              </widget>
             </item>

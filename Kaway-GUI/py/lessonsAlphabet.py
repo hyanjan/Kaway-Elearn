@@ -5,9 +5,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from functools import partial
 
-from assessments_static import *
 from db import database
-from modules import Modules
+
 
 
 
@@ -106,6 +105,7 @@ class LessonsAlphabet(QWidget):
         self.stacked_widget.setCurrentWidget(lessons) 
 
     def gotoAssessment(self, value):
+        from modules import Modules
         LessonsAlphabet.lessonName = value
         print(LessonsAlphabet.lessonName)
         database.putChosenLesson(value)

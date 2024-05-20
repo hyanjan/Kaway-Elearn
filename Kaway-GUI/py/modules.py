@@ -11,7 +11,6 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 
 #import functions
-from assessments_static import UI
 from db import database
 
 
@@ -57,10 +56,13 @@ class Modules(QWidget):
         # define buttons
         self.practiceButton = self.findChild(QPushButton, "PracticeNow")
         self.homeButton = self.findChild(QPushButton, "Home")
+        self.lessonsButton = self.findChild(QPushButton, "Lessons")
+
 
         # Define what buttons do
         # self.practiceButton.clicked.connect(self.gotoAssessment)
         self.homeButton.clicked.connect(self.gotoHome)
+        self.lessonsButton.clicked.connect(self.gotoLessons)
         self.playButton.clicked.connect(self.play)
         self.pauseButton.clicked.connect(self.pause)
         self.positionSlider.sliderMoved.connect(self.setPosition)

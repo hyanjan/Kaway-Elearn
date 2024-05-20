@@ -5,7 +5,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from functools import partial
 
-from assessments_static import *
+
 from db import database
 from modules_two import Modules
 
@@ -73,7 +73,7 @@ class Vocab(QWidget):
         self.stacked_widget.setCurrentWidget(modules)
 
     def hideSubtopic(self, latest):
-        buttons = [self.bahayButton, self.pintoButton, self.silidButton, self.salaButton, self.kusinaButton, self.guroButton, self.kailanButton, self.dilawButton, self.ubeButton]
+        buttons = [self.bahayButton, self.pintoButton, self.silidButton, self.salaButton, self.kailanButton, self.guroButton, self.kusinaButton, self.dilawButton, self.ubeButton]
 
         for index, button in enumerate(buttons):
             comp = index + 41

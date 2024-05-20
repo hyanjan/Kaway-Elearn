@@ -18,18 +18,23 @@ path = os.getcwd()
 class Home(QMainWindow):
     def __init__(self):
         super(Home, self).__init__()
-        self.setWindowTitle("Kaway - FSL Learning App") 
-    
+
         # Load the ui
         uic.loadUi("Kaway-GUI/pages/hometab.ui", self)
         self.setFixedSize(1910, 950)
 
         # define buttons
         self.lessontabButton = self.findChild(QPushButton, "Lessons")
+        self.tutorialButton = self.findChild(QPushButton, "Tutorial")
         self.userLabel = self.findChild(QLabel, "User")
+        self.homegif = self.findChild(QLabel, 'GIF')
+        self.movie = QMovie(r"Kaway-GUI\linear\home.gif") 
+        self.homegif.setMovie(self.movie)
+        self.movie.start()
 
         # Define what buttons do
         self.lessontabButton.clicked.connect(self.gotoLessons)
+        self.tutorialButton.clicked.connect(self.gotoTutorial)
 
         # Set username to page
         username = database.loadUser()
@@ -43,6 +48,13 @@ class Home(QMainWindow):
         lessons = Lessons(self.widget)
         self.widget.addWidget(lessons)
         self.widget.setCurrentWidget(lessons)
+
+    def gotoTutorial(self):
+        
+        from tutorial import Modules
+        modules = Modules(self.widget)
+        self.widget.addWidget(modules)
+        self.widget.setCurrentWidget(modules)
 
 # initialize the app
 app = QApplication(sys.argv)

@@ -421,25 +421,19 @@ border-radius: 32px
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QLabel" name="AnswerText_4">
+          <widget class="QPushButton" name="Tutorial">
            <property name="font">
             <font>
              <family>Inter</family>
              <pointsize>36</pointsize>
-             <bold>true</bold>
             </font>
            </property>
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
            <property name="styleSheet">
-            <string notr="true">color: rgb(255, 255, 255);</string>
+            <string notr="true">color: rgb(255, 255, 255);
+text-align:left;</string>
            </property>
            <property name="text">
-            <string>Module 1: Alphabet</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            <string>Learn how to use the application!</string>
            </property>
           </widget>
          </item>
@@ -456,7 +450,7 @@ border-radius: 32px
             <string notr="true">color: rgb(255, 255, 255);</string>
            </property>
            <property name="text">
-            <string>Learn how the basic alphabets are done in Filipino Sign Language</string>
+            <string>Check this out for a basic tutorial on using the application so you can start learning Filipino Sign Language.</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -480,6 +474,25 @@ border-radius: 32px
           </spacer>
          </item>
         </layout>
+       </widget>
+       <widget class="QLabel" name="GIF">
+        <property name="geometry">
+         <rect>
+          <x>900</x>
+          <y>20</y>
+          <width>561</width>
+          <height>301</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>../linear/check.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
        </widget>
       </widget>
       <widget class="QFrame" name="LowerFrame_3">

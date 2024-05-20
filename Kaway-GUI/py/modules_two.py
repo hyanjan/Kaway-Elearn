@@ -11,7 +11,6 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 
 #import functions
-from assessments_static import UI
 from db import database
 
 
@@ -55,10 +54,13 @@ class Modules(QWidget):
         # define buttons
         self.practiceButton = self.findChild(QPushButton, "PracticeNow")
         self.homeButton = self.findChild(QPushButton, "Home")
+        self.lessonsButton = self.findChild(QPushButton, "Lessons")
+
 
         # Define what buttons do
         # self.practiceButton.clicked.connect(self.gotoAssessment)
         self.homeButton.clicked.connect(self.gotoHome)
+        self.lessonsButton.clicked.connect(self.gotoLessons)
         self.playButton.clicked.connect(self.play)
         self.pauseButton.clicked.connect(self.pause)
         self.positionSlider.sliderMoved.connect(self.setPosition)
@@ -85,7 +87,7 @@ class Modules(QWidget):
     def gotoLessons(self):
         #import functions
         from lessonstab import Lessons
-        
+        self.mediaPlayer.stop()
         print("Button clicked!")
         lessons = Lessons(self.stacked_widget)
         self.stacked_widget.addWidget(lessons)
@@ -93,6 +95,7 @@ class Modules(QWidget):
 
     def gotoHome(self):
         from home import Home
+        self.mediaPlayer.stop()
         print("Button clicked!")
         home = Home(self.stacked_widget)
         self.stacked_widget.addWidget(home)
@@ -129,9 +132,10 @@ class Modules(QWidget):
         self.mediaPlayer.play()
 
     def changeModule(self):
-        if database.findRowIDValue('right_answer', database.getChosenLesson()) < 33:
+        lesson = database.findRowIDValue('right_answer', database.getChosenLesson())
+        if lesson < 33:
             self.moduleLabel.setText("Module 2")
-        elif database.findRowIDValue('right_answer', database.getChosenLesson()) < 42 and database.findRowIDValue('right_answer', database.getChosenLesson()) > 33:
+        elif lesson < 42 and lesson > 33:
             self.moduleLabel.setText("Module 3")
-        elif database.findRowIDValue('right_answer', database.getChosenLesson()) > 41:
+        elif lesson > 41:
             self.moduleLabel.setText("Module 4") 
