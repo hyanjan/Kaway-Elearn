@@ -104,6 +104,12 @@ class UI(QMainWindow):
         self.Detection.loading.connect(self.loading)
         self.Detection.start()
 
+    def closeEvent(self, event):
+        self.Detection.stopCamera()
+        self.Detection.quit()
+        self.Detection.wait()
+        event.accept()
+
         
     def goReview(self):
         from modules import Modules
@@ -246,6 +252,8 @@ class Detection(QThread):
         self.running = False  # Set the running flag to False
         if self.cap and self.cap.isOpened():
             self.cap.release()
+            self.timer.stop()
+        if hasattr(self, 'timer') and self.timer.isActive():
             self.timer.stop()
         self.wait()  # Wait for the thread to finish
             
