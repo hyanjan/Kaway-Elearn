@@ -520,7 +520,7 @@ border-radius: 32px</string>
         <rect>
          <x>30</x>
          <y>10</y>
-         <width>675</width>
+         <width>981</width>
          <height>118</height>
         </rect>
        </property>
@@ -660,6 +660,12 @@ border-radius: 32px
              </item>
              <item>
               <widget class="QLabel" name="SubContinueOne">
+               <property name="maximumSize">
+                <size>
+                 <width>707</width>
+                 <height>78</height>
+                </size>
+               </property>
                <property name="font">
                 <font>
                  <family>HoloLens MDL2 Assets</family>
@@ -734,6 +740,12 @@ border-radius: 32px
              </item>
              <item>
               <widget class="QLabel" name="SubContinueTwo">
+               <property name="maximumSize">
+                <size>
+                 <width>706</width>
+                 <height>78</height>
+                </size>
+               </property>
                <property name="font">
                 <font>
                  <family>HoloLens MDL2 Assets</family>
