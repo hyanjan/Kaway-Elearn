@@ -379,6 +379,12 @@ border-radius: 32px</string>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="maximumSize">
+        <size>
+         <width>271</width>
+         <height>81</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Poppins</family>

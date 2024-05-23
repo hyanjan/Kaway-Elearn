@@ -71,6 +71,12 @@ border-bottom-left-radius: 32px;</string>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QLabel" name="Kaway">
+          <property name="maximumSize">
+           <size>
+            <width>341</width>
+            <height>209</height>
+           </size>
+          </property>
           <property name="font">
            <font>
             <family>Poppins</family>

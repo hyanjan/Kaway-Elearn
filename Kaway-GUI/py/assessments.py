@@ -287,8 +287,7 @@ class Detection(QThread):
                 pixmap = qImg.scaled(960, 540, aspectRatioMode=Qt.KeepAspectRatio)
                 self.CameraFrame.emit(pixmap)
 
-                if TIMER == 0:
-                    self.loading.emit(True)
+                                    
             cv2.waitKey(125) 
 
             # current time 
@@ -302,6 +301,8 @@ class Detection(QThread):
                 TIMER = TIMER-1
                 global startDetection
                 startDetection = 1
+
+        self.loading.emit(True)
 
 
 

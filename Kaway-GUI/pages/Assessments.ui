@@ -399,6 +399,12 @@ border-radius: 32px
          <height>211</height>
         </rect>
        </property>
+       <property name="maximumSize">
+        <size>
+         <width>131</width>
+         <height>211</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Poppins</family>
@@ -424,6 +430,12 @@ border-radius: 32px
          <width>131</width>
          <height>211</height>
         </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>131</width>
+         <height>211</height>
+        </size>
        </property>
        <property name="font">
         <font>
@@ -622,6 +634,12 @@ border-radius: 32px
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>339</width>
+            <height>32</height>
+           </size>
           </property>
           <property name="font">
            <font>

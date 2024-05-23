@@ -266,8 +266,8 @@ class Detection(QThread):
                 global startDetection
                 startDetection = 1
 
-            if TIMER == 0:
-                self.loading.emit(True)
+        self.loading.emit(True)    
+                
                 
 
     def getLesson(self):
