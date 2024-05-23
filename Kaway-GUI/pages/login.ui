@@ -64,7 +64,7 @@ border-bottom-left-radius: 32px;</string>
         <rect>
          <x>60</x>
          <y>20</y>
-         <width>376</width>
+         <width>951</width>
          <height>211</height>
         </rect>
        </property>
@@ -185,7 +185,7 @@ border-radius: 32px</string>
          <rect>
           <x>19</x>
           <y>310</y>
-          <width>221</width>
+          <width>231</width>
           <height>71</height>
          </rect>
         </property>
