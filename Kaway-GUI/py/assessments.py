@@ -427,7 +427,7 @@ class Detection(QThread):
                     # Read feed
                     ret, frame = self.cap.read()
                     image, results = self.mediapipe_detection(frame, holistic)
-                    self.draw_styled_landmarks(image, results)
+                    # self.draw_styled_landmarks(image, results)
 
 
                     # Show to screen and wait for key to be pressed
@@ -453,7 +453,7 @@ class Detection(QThread):
                         # Make detections
                         ret, frame = self.cap.read()
                         image, results = self.mediapipe_detection(frame, holistic)
-                        self.draw_styled_landmarks(image, results)
+                        # self.draw_styled_landmarks(image, results)
                         
                         if ret:
                             # Resize frame

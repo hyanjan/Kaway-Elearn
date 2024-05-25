@@ -39,6 +39,16 @@ class Home(QMainWindow):
         self.ContinueTwoLabel = self.findChild(QLabel, "SubContinueTwo")
         self.loadModules()
 
+        self.Notif = self.findChild(QFrame, "NotifFrame")
+        self.NotifButton = self.findChild(QPushButton, "NotifButton")
+        self.NotifNum = self.findChild(QLabel, "NotifNum")
+        self.NotifText = self.findChild(QLabel, "NotifText")
+
+        self.Notif.hide()
+        database.setValue()
+        self.NotifButton.clicked.connect(self.gotoNotif)
+        self.updateNotif()
+
 
         
         # Define what buttons do
@@ -78,6 +88,42 @@ class Home(QMainWindow):
         lessons = Lessons(self.stacked_widget)
         self.stacked_widget.addWidget(lessons)
         self.stacked_widget.setCurrentWidget(lessons)
+
+    def gotoNotif(self):
+        notif = database.getCam('notif', 1)
+        trigger = database.getCam('trigger', 1)
+
+        if trigger == 'True':
+            if notif == 1:
+                self.NotifText.setText('You have accomplished 1 module!')
+            elif notif == 2:
+                self.NotifText.setText('You have accomplished 2 modules!')
+            elif notif == 3:
+                self.NotifText.setText('You have accomplished 3 modules!')
+            elif notif == 4:
+                self.NotifText.setText('You have accomplished 4 modules!')
+            self.Notif.show()
+            
+        else:
+            self.Notif.hide()
+        database.setValue()
+
+    def updateNotif(self):
+        notif = database.getLatestLesson()
+        if notif < 29:
+            self.NotifNum.setText('1')
+            database.updateNotif(1)
+        elif notif < 33 and notif > 28:
+            self.NotifNum.setText('2')
+            database.updateNotif(2)
+        elif notif < 42 and notif > 32:
+            self.NotifNum.setText('3')
+            database.updateNotif(3)
+        elif notif > 42:
+            self.NotifNum.setText('4')
+            database.updateNotif(4)
+
+
 
     def gotoTutorial(self):
         

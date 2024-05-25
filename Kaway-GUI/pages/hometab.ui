@@ -787,13 +787,109 @@ border-radius: 32px
         </item>
        </layout>
       </widget>
-      <zorder>NotifButton</zorder>
-      <zorder>NotifNum</zorder>
+      <widget class="QFrame" name="NotifFrame">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>70</y>
+         <width>1451</width>
+         <height>181</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(103, 153, 176);
+border-radius: 32px</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget_3">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>39</y>
+          <width>1431</width>
+          <height>121</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QFrame" name="UpperFrame_6">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(142, 202, 230);
+border-radius: 32px
+</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_11">
+              <item>
+               <widget class="QLabel" name="NotifText">
+                <property name="maximumSize">
+                 <size>
+                  <width>707</width>
+                  <height>78</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>HoloLens MDL2 Assets</family>
+                  <pointsize>24</pointsize>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(255, 255, 255);</string>
+                </property>
+                <property name="text">
+                 <string>You have accomplished 1 module!</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
       <zorder>LowerFrame_3</zorder>
       <zorder>MidFrame_3</zorder>
       <zorder>UpperFrame_3</zorder>
       <zorder>gridLayoutWidget</zorder>
       <zorder>gridLayoutWidget_2</zorder>
+      <zorder>NotifFrame</zorder>
+      <zorder>NotifButton</zorder>
+      <zorder>NotifNum</zorder>
      </widget>
     </widget>
     <widget class="QFrame" name="MainFrame">

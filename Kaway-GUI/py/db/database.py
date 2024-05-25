@@ -137,3 +137,38 @@ def getCam(column_name, rowid):
     conn.commit()
     conn.close()
     return value
+
+
+def setValue():
+    conn = sqlite3.connect('Kaway-GUI\\py\\db\\users.db')
+    c = conn.cursor()
+
+    c.execute("SELECT trigger from users")
+    result = c.fetchone()
+    if result is not None and result[0] == 'True':
+        new_value = 'False'
+        c.execute("UPDATE users SET trigger = ?", (new_value,))
+    elif result is not None and result[0] == 'False':
+        new_value = 'True'
+        c.execute("UPDATE users SET trigger = ?", (new_value,))
+    else:
+        new_value = 'True'
+        c.execute("UPDATE users SET trigger = ?", (new_value,))
+
+    conn.commit()
+    conn.close()
+    return new_value
+
+def updateNotif(lesson):
+    conn = sqlite3.connect('Kaway-GUI\\py\\db\\users.db')
+    c = conn.cursor()
+
+    c.execute("SELECT notif from users")
+    value = c.fetchone()[0]
+
+    c.execute("UPDATE users SET notif = ?", (lesson,))
+
+
+    conn.commit()
+    conn.close()
+    return lesson
