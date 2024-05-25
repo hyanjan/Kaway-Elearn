@@ -110,3 +110,30 @@ def updateLatest():
     conn.commit()
     conn.close()
     return new_value
+
+def setCam(cam):
+    conn = sqlite3.connect('Kaway-GUI\\py\\db\\users.db')
+    c = conn.cursor()
+
+    c.execute("SELECT camera from users")
+    value = c.fetchone()[0]
+
+    new_value = cam
+
+    c.execute("UPDATE users SET camera = ?", (new_value,))
+
+
+    conn.commit()
+    conn.close()
+    return new_value
+
+def getCam(column_name, rowid):
+    conn = sqlite3.connect('Kaway-GUI\\py\\db\\users.db')
+    c = conn.cursor()
+
+    c.execute(f"SELECT {column_name} FROM users WHERE rowid=?", (rowid,))
+    value = c.fetchone()[0]
+
+    conn.commit()
+    conn.close()
+    return value

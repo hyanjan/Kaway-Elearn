@@ -38,7 +38,7 @@ class Greetings(QWidget):
         self.umagaButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Umaga'))
         self.haponButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Hapon'))
         self.gabiButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Gabi'))
-        self.arawButton.clicked.connect(partial(self.gotoAssessment, 'Magandang araw'))
+        self.arawButton.clicked.connect(partial(self.gotoAssessment, 'Magandang Araw'))
         self.kumustaButton.clicked.connect(partial(self.gotoAssessment, 'Kumusta ka'))
         self.paalamButton.clicked.connect(partial(self.gotoAssessment, 'Paalam'))
         self.ingatButton.clicked.connect(partial(self.gotoAssessment, 'Ingat ka'))

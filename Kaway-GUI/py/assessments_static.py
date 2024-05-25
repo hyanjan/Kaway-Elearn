@@ -71,6 +71,7 @@ class UI(QMainWindow):
         self.cap = None
         self.Detection = Detection()
         self.Detection.CameraFrame.connect(self.UpdateFrame)
+        self.Detection.error.connect(self.CameraError)
 
         self.Detection.start()
 
@@ -124,6 +125,12 @@ class UI(QMainWindow):
 
     def updateLabelText(self, text):
         self.rightAnswer.setText(text)
+
+    def CameraError(self):
+        self.answerLogo.hide()
+        self.rightAnswer.hide()
+        self.ErrorText.setText('Use only one hand')
+        self.Error.show()
 
     def checkAnswer(self, bool):
         if not bool:
@@ -197,6 +204,7 @@ class Detection(QThread):
     LabelTextChanged = pyqtSignal(str)
     CheckAnswer = pyqtSignal(bool)
     loading = pyqtSignal(bool)
+    error = pyqtSignal(bool)
     global threadCamera
     threadCamera = False
 
@@ -205,7 +213,7 @@ class Detection(QThread):
         self.cap = None
 
     def startCamera(self):
-        self.cap = cv2.VideoCapture(0)  # Open the camera (0 for integrated camera, check device list to confirm)
+        self.cap = cv2.VideoCapture(database.getCam('camera', 1))  # Open the camera (0 for integrated camera, check device list to confirm)
         if not self.cap.isOpened():
             print("Error: Couldn't open camera.")
             return
@@ -279,156 +287,164 @@ class Detection(QThread):
         answer = []
         answer_character = []
 
-        if threadCamera == True:
-            while self.cap and self.cap.isOpened():
-                # Read feed
-                ret, frame = self.cap.read()
-
-                # Show to screen and wait for key to be pressed
-                if ret:
-                    # Resize frame
-                    # image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
-                    # Convert frame to RGB format
-                    rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-                    # Convert RGB image to QImage
-                    h, w, ch = rgbImage.shape
-                    bytesPerLine = ch * w
-                    qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
-                    # Convert QImage to QPixmap to display in QLabel
-                    pixmap = qImg.scaled(960, 540, aspectRatioMode=Qt.KeepAspectRatio)
-                    self.CameraFrame.emit(pixmap)
-                k = cv2.waitKey(125)
-
-                data_aux = []
-                x_ = []
-                y_ = []
-                count = 0
-
-                global startDetection
-                if startDetection == 1:
+        try:
+            if threadCamera == True:
+                while self.cap and self.cap.isOpened():
+                    # Read feed
                     ret, frame = self.cap.read()
-                    H, W, _ = frame.shape
 
-                    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    # Show to screen and wait for key to be pressed
+                    if ret:
+                        # Resize frame
+                        # image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
+                        # Convert frame to RGB format
+                        rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-                    results = hands.process(frame_rgb)
-                    if results.multi_hand_landmarks:
-                        # for hand_landmarks in results.multi_hand_landmarks:
-                        #     mp_drawing.draw_landmarks(
-                        #         frame,  # image to draw
-                        #         hand_landmarks,  # model output
-                        #         mp_hands.HAND_CONNECTIONS,  # hand connections
-                        #         mp_drawing_styles.get_default_hand_landmarks_style(),
-                        #         mp_drawing_styles.get_default_hand_connections_style())
+                        # Convert RGB image to QImage
+                        h, w, ch = rgbImage.shape
+                        bytesPerLine = ch * w
+                        qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
+                        # Convert QImage to QPixmap to display in QLabel
+                        pixmap = qImg.scaled(960, 540, aspectRatioMode=Qt.KeepAspectRatio)
+                        self.CameraFrame.emit(pixmap)
+                    k = cv2.waitKey(125)
 
-                        for hand_landmarks in results.multi_hand_landmarks:
-                            for i in range(len(hand_landmarks.landmark)):
-                                x = hand_landmarks.landmark[i].x
-                                y = hand_landmarks.landmark[i].y
+                    data_aux = []
+                    x_ = []
+                    y_ = []
+                    count = 0
 
-                                x_.append(x)
-                                y_.append(y)
+                    global startDetection
+                    if startDetection == 1:
+                        ret, frame = self.cap.read()
+                        H, W, _ = frame.shape
 
-                            for i in range(len(hand_landmarks.landmark)):
-                                x = hand_landmarks.landmark[i].x
-                                y = hand_landmarks.landmark[i].y
-                                data_aux.append(x - min(x_))
-                                data_aux.append(y - min(y_))
+                        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-                        x1 = int(min(x_) * W) - 10
-                        y1 = int(min(y_) * H) - 10
+                        results = hands.process(frame_rgb)
+                        if results.multi_hand_landmarks:
+                            # for hand_landmarks in results.multi_hand_landmarks:
+                            #     mp_drawing.draw_landmarks(
+                            #         frame,  # image to draw
+                            #         hand_landmarks,  # model output
+                            #         mp_hands.HAND_CONNECTIONS,  # hand connections
+                            #         mp_drawing_styles.get_default_hand_landmarks_style(),
+                            #         mp_drawing_styles.get_default_hand_connections_style())
 
-                        x2 = int(max(x_) * W) - 10
-                        y2 = int(max(y_) * H) - 10
+                            for hand_landmarks in results.multi_hand_landmarks:
+                                for i in range(len(hand_landmarks.landmark)):
+                                    x = hand_landmarks.landmark[i].x
+                                    y = hand_landmarks.landmark[i].y
 
-                        prediction = model.predict([np.asarray(data_aux)])
+                                    x_.append(x)
+                                    y_.append(y)
 
-                        predicted_character = labels_dict[int(prediction[0])]
+                                for i in range(len(hand_landmarks.landmark)):
+                                    x = hand_landmarks.landmark[i].x
+                                    y = hand_landmarks.landmark[i].y
+                                    data_aux.append(x - min(x_))
+                                    data_aux.append(y - min(y_))
 
-                        # cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
-                        # cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3,
-                        #             cv2.LINE_AA)
-                    
-                        answer.append(prediction)
-                        answer_character.append(predicted_character)
-                        count+=1
-                        print(answer[-1])
+                            x1 = int(min(x_) * W) - 10
+                            y1 = int(min(y_) * H) - 10
 
-                        if len(answer) == 15:
-                            
-                            if answer[3] == answer[9]:
-                                print(answer_character[9])
-                                # Emit the character string
-                                self.LabelTextChanged.emit(answer_character[9])
+                            x2 = int(max(x_) * W) - 10
+                            y2 = int(max(y_) * H) - 10
 
-                                if self.getLesson() == answer_character[9]:
-                                    self.CheckAnswer.emit(True)
-                                else:
+                            prediction = model.predict([np.asarray(data_aux)])
+
+                            predicted_character = labels_dict[int(prediction[0])]
+
+                            # cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
+                            # cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3,
+                            #             cv2.LINE_AA)
+                        
+                            answer.append(prediction)
+                            answer_character.append(predicted_character)
+                            count+=1
+                            print(answer[-1])
+
+                            if len(answer) == 15:
+                                
+                                if answer[3] == answer[9]:
+                                    print(answer_character[9])
+                                    # Emit the character string
                                     self.LabelTextChanged.emit(answer_character[9])
-                                    self.CheckAnswer.emit(False)
-                            elif answer[3] == '13' and answer[9] == '6':
-                                print('NG')
-                                # Emit the 'NG' string
-                                self.LabelTextChanged.emit('NG')
 
-                                if self.getLesson() == 'NG':
-                                    self.CheckAnswer.emit(True)
+                                    if self.getLesson() == answer_character[9]:
+                                        self.CheckAnswer.emit(True)
+                                    else:
+                                        self.LabelTextChanged.emit(answer_character[9])
+                                        self.CheckAnswer.emit(False)
+                                elif answer[3] == '13' and answer[9] == '6':
+                                    print('NG')
+                                    # Emit the 'NG' string
+                                    self.LabelTextChanged.emit('NG')
+
+                                    if self.getLesson() == 'NG':
+                                        self.CheckAnswer.emit(True)
+                                    else:
+                                        self.CheckAnswer.emit(False)
+                                
+                                elif answer[12] == '14':
+                                    print('Ñ')
+                                    self.LabelTextChanged.emit('Ñ')
+
+                                    if self.getLesson() == 'Ñ':
+                                        self.CheckAnswer.emit(True)
+                                    else:
+                                        self.CheckAnswer.emit(False)
+
+                                elif answer[12] == '9':
+                                    print('Ñ')
+                                    self.LabelTextChanged.emit('J')
+
+                                    if self.getLesson() == 'J':
+                                        self.CheckAnswer.emit(True)
+                                    else:
+                                        self.CheckAnswer.emit(False)
+
+                                elif answer[12] == '26':
+                                    print('Ñ')
+                                    self.LabelTextChanged.emit('Z')
+
+                                    if self.getLesson() == 'Z':
+                                        self.CheckAnswer.emit(True)
+                                    else:
+                                        self.CheckAnswer.emit(False)   
                                 else:
-                                    self.CheckAnswer.emit(False)
-                            
-                            elif answer[12] == '14':
-                                print('Ñ')
-                                self.LabelTextChanged.emit('Ñ')
-
-                                if self.getLesson() == 'Ñ':
-                                    self.CheckAnswer.emit(True)
-                                else:
-                                    self.CheckAnswer.emit(False)
-
-                            elif answer[12] == '9':
-                                print('Ñ')
-                                self.LabelTextChanged.emit('J')
-
-                                if self.getLesson() == 'J':
-                                    self.CheckAnswer.emit(True)
-                                else:
-                                    self.CheckAnswer.emit(False)
-
-                            elif answer[12] == '26':
-                                print('Ñ')
-                                self.LabelTextChanged.emit('Z')
-
-                                if self.getLesson() == 'Z':
-                                    self.CheckAnswer.emit(True)
-                                else:
-                                    self.CheckAnswer.emit(False)                            
+                                    self.LabelTextChanged.emit('Can not detect')
+                                    self.CheckAnswer.emit(False)                          
 
 
-                        if len(answer) == 15:
-                            print("get out")
-                            startDetection = 0
-                            answer = []
-                            answer_character = []
+                            if len(answer) == 15:
+                                print("get out")
+                                startDetection = 0
+                                answer = []
+                                answer_character = []
 
 
-                        if ret:
-                            # Resize frame
-                            # image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
-                            # Convert frame to RGB format
-                            rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                            
-                            
-                            # Convert RGB image to QImage
-                            h, w, ch = rgbImage.shape
-                            bytesPerLine = ch * w
-                            qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
-                            # Convert QImage to QPixmap to display in QLabel
-                            pixmap = qImg.scaled(960, 540, aspectRatioMode=Qt.KeepAspectRatio)
-                            self.CameraFrame.emit(pixmap)
-                        cv2.waitKey(1)
+                            if ret:
+                                # Resize frame
+                                # image = cv2.resize(image, (960, 540))  # Adjust the dimensions as needed
+                                # Convert frame to RGB format
+                                rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                                
+                                
+                                # Convert RGB image to QImage
+                                h, w, ch = rgbImage.shape
+                                bytesPerLine = ch * w
+                                qImg = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
+                                # Convert QImage to QPixmap to display in QLabel
+                                pixmap = qImg.scaled(960, 540, aspectRatioMode=Qt.KeepAspectRatio)
+                                self.CameraFrame.emit(pixmap)
+                            cv2.waitKey(1)
 
-            # Release the video capture and destroy OpenCV windows
-            if self.cap and self.cap.isOpened():
-                self.cap.release()
-                                                    
+                # Release the video capture and destroy OpenCV windows
+                if self.cap and self.cap.isOpened():
+                    self.cap.release()
+
+        except ValueError:
+            print('two hands')
+            self.stopCamera()
+            self.error.emit(True)                      

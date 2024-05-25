@@ -439,16 +439,16 @@ border-radius: 32px
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QWidget" name="verticalLayoutWidget_2">
+       <widget class="QWidget" name="horizontalLayoutWidget_2">
         <property name="geometry">
          <rect>
           <x>20</x>
           <y>30</y>
-          <width>471</width>
-          <height>91</height>
+          <width>311</width>
+          <height>80</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QPushButton" name="pushButton">
            <property name="font">
@@ -462,7 +462,23 @@ border-radius: 32px
 text-align:left;</string>
            </property>
            <property name="text">
-            <string>Color</string>
+            <string>Camera:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="camera">
+           <property name="font">
+            <font>
+             <pointsize>24</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color:rgba(0,0,0,0);
+border:none;
+border-bottom:2px solid rgba(105, 118, 132,  255);
+color:rgba(255,255,255,230);
+padding-bottom:7px;</string>
            </property>
           </widget>
          </item>
@@ -592,12 +608,59 @@ text-align:left;</string>
         </item>
        </layout>
       </widget>
+      <widget class="QPushButton" name="save">
+       <property name="geometry">
+        <rect>
+         <x>1380</x>
+         <y>540</y>
+         <width>121</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>300</width>
+         <height>200</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Inter</family>
+         <pointsize>26</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-radius: 32px;
+color:rgb(255, 255, 255);
+background-color: rgb(142, 202, 230);
+
+
+</string>
+       </property>
+       <property name="text">
+        <string>Save</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
       <zorder>NotifButton</zorder>
       <zorder>NotifNum</zorder>
       <zorder>LowerFrame_3</zorder>
       <zorder>MidFrame_3</zorder>
       <zorder>UpperFrame_3</zorder>
       <zorder>gridLayoutWidget</zorder>
+      <zorder>save</zorder>
      </widget>
     </widget>
     <widget class="QFrame" name="MainFrame">

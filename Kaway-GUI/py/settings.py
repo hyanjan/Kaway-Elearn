@@ -27,6 +27,8 @@ class Settings(QMainWindow):
         self.homeButton = self.findChild(QPushButton, "Home")
         self.tutorialButton = self.findChild(QPushButton, "Tutorial")
         self.userLabel = self.findChild(QLabel, "User")
+        self.camera = self.findChild(QLineEdit, "camera")
+        self.save = self.findChild(QPushButton, "save")
 
         # Define what buttons do
         self.lessontabButton.clicked.connect(self.gotoLessons)
@@ -36,8 +38,22 @@ class Settings(QMainWindow):
         username = database.loadUser()
         self.userLabel.setText(username)
 
+        self.save.clicked.connect(self.saveSettings)
+
         self.profile = self.findChild(QPushButton, "Profile")
         self.profile.clicked.connect(self.gotoProfile)
+
+    def saveSettings(self):
+        camSettings = self.camera.text()
+
+        if camSettings == '0':
+            database.setCam(0)
+
+        elif camSettings == '1':
+            database.setCam(1)
+
+        else:
+            print("Please input all fields.")
 
     def gotoLessons(self):
         #import functions

@@ -71,6 +71,14 @@ class Modules(QWidget):
         self.mediaPlayer.setVideoOutput(self.videoWidget)
         self.mediaPlayer.positionChanged.connect(self.positionChanged)
         self.mediaPlayer.durationChanged.connect(self.durationChanged)
+        self.mediaPlayer.mediaStatusChanged.connect(self.handleMediaStatusChanged)
+
+
+    def handleMediaStatusChanged(self, status):
+        if status == QMediaPlayer.EndOfMedia:
+            self.mediaPlayer.setPosition(0)
+            self.mediaPlayer.play()
+
 
     def practiceNow(self):
         from assessments_static import UI
