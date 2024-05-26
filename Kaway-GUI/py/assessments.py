@@ -112,7 +112,7 @@ class UI(QMainWindow):
 
         
     def goReview(self):
-        from modules import Modules
+        from modules_two import Modules
 
         self.Detection.stopCamera()
         modules = Modules(self.stacked_widget)

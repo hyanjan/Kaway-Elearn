@@ -48,7 +48,7 @@ class Home(QMainWindow):
     def loginfunction(self):
         user = self.emailfield.text()
         password = self.passwordfield.text()
-
+ 
         if len(user)==0 or len(password)==0:
             print("Please input all fields.")
             self.error.show()
@@ -79,6 +79,7 @@ class Home(QMainWindow):
 app = QApplication(sys.argv)
 MainWindowApp = Home()
 MainWindowApp.widget = QStackedWidget()
+MainWindowApp.widget.setWindowTitle("Kaway - FSL Learning App") 
 MainWindowApp.widget.addWidget(MainWindowApp)
 MainWindowApp.widget.show()
 sys.exit(app.exec_())
