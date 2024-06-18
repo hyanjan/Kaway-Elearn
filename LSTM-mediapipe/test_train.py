@@ -54,10 +54,10 @@ def extract_keypoints(results):
 
 # Path for exported data, numpy arrays
 path = "C:\\Users\\hyanx\\Documents\\Thesis\\"
-DATA_PATH = os.path.join(path,'MP_Mod4A') 
+DATA_PATH = os.path.join(path,'MP_HyanTest') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['Bahay', 'Kailan', 'Pinto', 'Sala', 'Silid'])
+actions = np.array(['Ako si', 'Ano pangalan mo', 'Ilang taon ka na', 'Sino'])
 
 # Thirty videos worth of data
 no_sequences = 33
@@ -110,11 +110,11 @@ from keras.callbacks import TensorBoard
 from keras.optimizers import AdamW
 from keras.callbacks import EarlyStopping
 
-log_dir = os.path.join(path, 'Logs-0.4')
-# tb_callback = TensorBoard(log_dir=log_dir)
-earlystopping_callback = EarlyStopping(monitor='categorical_accuracy',verbose=1,min_delta=0.0001,patience=100,baseline=None)
-model = Sequential()
-del model
+log_dir = os.path.join(path, 'Logs')
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+tb_callback = TensorBoard(log_dir=log_dir)
+earlystopping_callback = EarlyStopping(monitor='categorical_accuracy',verbose=1,min_delta=0.0001,patience=20,baseline=None)
 model = Sequential()
 model.add(LSTM(64, return_sequences=False, activation='relu', input_shape=(40,1662)))
 # model.add(LSTM(128, return_sequences=True, activation='relu'))
@@ -125,13 +125,13 @@ model.add(Dense(actions.shape[0], activation='softmax'))
 
 #opt = SGD(lr=0.0001)
 model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
-model.fit(X_train, y_train, epochs=2000, callbacks=[earlystopping_callback])
+model.fit(X_train, y_train, epochs=2000, callbacks=[tb_callback, earlystopping_callback])
 model.summary()
 
 #Save model
 #model.save('C:/Users/hyanx/Documents/Thesis/MP_HyanLetters/letters_2.h5')
 #model.save(r'C:\Users\hyanx\Documents\Thesis\MP_Hyan\introduction.h5')
-model.save(r'C:\Users\hyanx\Documents\Thesis\Kaway-GUI\model\vocab_A.h5')
+model.save(r'C:\Users\hyanx\Documents\Thesis\Kaway-GUI\model\m2.h5')
 
 # Real-time Test
 # colors = [(245,117,16), (117,245,16), (16,117,245)]

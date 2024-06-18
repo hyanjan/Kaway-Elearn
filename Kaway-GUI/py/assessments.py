@@ -8,6 +8,7 @@ import warnings
 import os
 import cv2
 from functools import partial
+import playsound
 
 #Detection req import
 import cv2
@@ -24,6 +25,7 @@ from sklearn.model_selection import train_test_split
 from keras.utils import to_categorical
 from scipy import stats
 from db import database
+import csv
 
 #initialize mediapipe
 mp_holistic = mp.solutions.holistic # Holistic model
@@ -136,12 +138,13 @@ class UI(QMainWindow):
         self.rightAnswer.setText(text)
 
     def checkAnswer(self, bool):
-        if bool == False:
+        if not bool:
             self.rightAnswer.setStyleSheet('color: rgb(255, 0, 0)')
             self.answerLogo.setPixmap(QPixmap.fromImage(QImage("Kaway-GUI\linear\cross.png")))
             self.rightAnswer.show()
             self.answerLogo.show()
             self.reviewButton.show()
+            playsound('Kaway-GUI/audio/incorrect.wav')  # Play the "incorrect" sound
         else:
             self.rightAnswer.setStyleSheet('color: rgb(0, 255, 0)')
             self.answerLogo.setPixmap(QPixmap.fromImage(QImage("Kaway-GUI\linear\check.png")))
@@ -149,6 +152,7 @@ class UI(QMainWindow):
             self.rightAnswer.show()
             self.answerLogo.show()
             self.reviewButton.hide()
+            playsound('Kaway-GUI/audio/correct.wav')  # Play the "correct" sound
 
     def startCameraGUI(self):
         self.Error.hide()
@@ -224,6 +228,19 @@ class Detection(QThread):
     loading = pyqtSignal(bool)
     global threadCamera
     threadCamera = False
+
+    # def save_keypoints_to_csv(self, keypoints, filename="keypoints.csv"):
+    #     # Save the keypoints to a CSV file
+    #     with open(filename, mode='w', newline='') as file:
+    #         writer = csv.writer(file)
+    #         # Write the header
+    #         header = ['pose_x', 'pose_y', 'pose_z', 'pose_visibility'] * 33 + \
+    #                  ['face_x', 'face_y', 'face_z'] * 468 + \
+    #                  ['lh_x', 'lh_y', 'lh_z'] * 21 + \
+    #                  ['rh_x', 'rh_y', 'rh_z'] * 21
+    #         writer.writerow(header)
+    #         # Write the keypoints
+    #         writer.writerow(keypoints)
 
     def __init__(self):
         super(Detection, self).__init__()
@@ -473,6 +490,7 @@ class Detection(QThread):
 
                         # 2. Prediction logic
                         keypoints = self.extract_keypoints(results)
+                        # self.save_keypoints_to_csv(keypoints, "detection_keypoints.csv")
 
                         sequence.append(keypoints)
                         sequence = sequence[-40:]

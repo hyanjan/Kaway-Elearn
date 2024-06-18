@@ -3,11 +3,8 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-import sys
-import warnings
-import os
 import cv2
-from functools import partial
+from playsound import playsound
 
 #Detection req import
 import cv2
@@ -139,6 +136,7 @@ class UI(QMainWindow):
             self.rightAnswer.show()
             self.answerLogo.show()
             self.reviewButton.show()
+            playsound('Kaway-GUI/audio/incorrect.wav')  # Play the "incorrect" sound
         else:
             self.rightAnswer.setStyleSheet('color: rgb(0, 255, 0)')
             self.answerLogo.setPixmap(QPixmap.fromImage(QImage("Kaway-GUI\linear\check.png")))
@@ -146,6 +144,7 @@ class UI(QMainWindow):
             self.rightAnswer.show()
             self.answerLogo.show()
             self.reviewButton.hide()
+            playsound('Kaway-GUI/audio/correct.wav')  # Play the "correct" sound
 
     def startCameraGUI(self):
         self.Error.hide()

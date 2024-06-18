@@ -28,6 +28,7 @@ class Settings(QMainWindow):
         self.tutorialButton = self.findChild(QPushButton, "Tutorial")
         self.userLabel = self.findChild(QLabel, "User")
         self.camera = self.findChild(QLineEdit, "camera")
+        self.volume = self.findChild(QSlider, "volume")
         self.save = self.findChild(QPushButton, "save")
 
         # Define what buttons do
@@ -46,6 +47,7 @@ class Settings(QMainWindow):
     def saveSettings(self):
         camSettings = self.camera.text()
 
+
         if camSettings == '0':
             database.setCam(0)
 
@@ -54,6 +56,7 @@ class Settings(QMainWindow):
 
         else:
             print("Please input all fields.")
+
 
     def gotoLessons(self):
         #import functions

@@ -3,15 +3,11 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtWidgets, QtTest
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtMultimedia import *
 import sys
 import warnings
 import os
-import time
-import mediapipe
-
-
-from db import database
-
+import mediapipe as mp
 
 # initialize files and warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -44,6 +40,33 @@ class Home(QMainWindow):
 
         self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password)
         self.login.clicked.connect(self.loginfunction)
+
+        # Setup background music
+        self.setup_background_music()
+
+
+    def setup_background_music(self):
+        # Create a QMediaPlayer object
+        self.mediaPlayer = QMediaPlayer()
+        
+        # Create a QMediaPlaylist object
+        self.playlist = QMediaPlaylist()
+        
+        # Add a music file to the playlist
+        self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile("Kaway-GUI/audio/music.mp3")))
+        
+        # Set the playlist to loop
+        self.playlist.setPlaybackMode(QMediaPlaylist.Loop)
+        
+        # Set the playlist to the media player
+        self.mediaPlayer.setPlaylist(self.playlist)
+        
+        # Set volume (0 to 100)
+        self.mediaPlayer.setVolume(50)
+        
+        # Play the music
+        self.mediaPlayer.play()
+        
 
     def loginfunction(self):
         user = self.emailfield.text()

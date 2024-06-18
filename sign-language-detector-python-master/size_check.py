@@ -2,7 +2,7 @@ import os
 import cv2
 
 # Directory containing the images
-IMAGE_DIR = './data_letters/5'
+IMAGE_DIR = './Static_Letters/0'
 
 # Iterate over each image in the directory
 for filename in os.listdir(IMAGE_DIR):

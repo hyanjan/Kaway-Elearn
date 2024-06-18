@@ -330,16 +330,16 @@ border-radius: 32px</string>
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QWidget" name="verticalLayoutWidget_4">
+       <widget class="QWidget" name="horizontalLayoutWidget_3">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>60</y>
-          <width>1011</width>
-          <height>81</height>
+          <x>21</x>
+          <y>59</y>
+          <width>941</width>
+          <height>91</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
           <widget class="QPushButton" name="pushButton_2">
            <property name="font">
@@ -353,7 +353,14 @@ border-radius: 32px</string>
 text-align:left;</string>
            </property>
            <property name="text">
-            <string>Volume</string>
+            <string>Volume:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="volume">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
