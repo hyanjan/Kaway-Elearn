@@ -97,7 +97,7 @@ background-color: rgba(255, 255, 255, 0);</string>
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>240</y>
+         <y>450</y>
          <width>271</width>
          <height>91</height>
         </rect>
@@ -218,7 +218,8 @@ border-bottom-right-radius: 32px;</string>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color:rgb(255, 255, 255)</string>
+        <string notr="true">color:rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0)</string>
        </property>
        <property name="text">
         <string>Profile</string>
@@ -418,7 +419,7 @@ text-align:left;</string>
               <string notr="true">color: rgb(255, 255, 255);</string>
              </property>
              <property name="text">
-              <string>Module 3: Completed</string>
+              <string>Module 3: In Progress</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

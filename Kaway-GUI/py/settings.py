@@ -28,8 +28,8 @@ class Settings(QMainWindow):
         self.tutorialButton = self.findChild(QPushButton, "Tutorial")
         self.userLabel = self.findChild(QLabel, "User")
         self.camera = self.findChild(QLineEdit, "camera")
-        self.volume = self.findChild(QSlider, "volume")
         self.save = self.findChild(QPushButton, "save")
+
 
         # Define what buttons do
         self.lessontabButton.clicked.connect(self.gotoLessons)

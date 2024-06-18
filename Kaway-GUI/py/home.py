@@ -68,7 +68,7 @@ class Home(QMainWindow):
 
     def gotoSettings(self):
         from settings import Settings
-        print("Button clicked!")
+
         settings = Settings(self.stacked_widget)
         self.stacked_widget.addWidget(settings)
         self.stacked_widget.setCurrentWidget(settings)

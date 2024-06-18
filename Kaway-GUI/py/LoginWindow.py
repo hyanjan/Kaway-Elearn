@@ -14,9 +14,9 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 path = os.getcwd()
 
 # Initialize Classes
-class Home(QMainWindow):
+class Login(QMainWindow):
     def __init__(self):
-        super(Home, self).__init__()
+        super(Login, self).__init__()
         self.setWindowTitle("Kaway - FSL Learning App") 
     
         # Load the ui
@@ -66,6 +66,11 @@ class Home(QMainWindow):
         
         # Play the music
         self.mediaPlayer.play()
+
+    def setVolume(self, volume):
+        # Set the volume of the media player
+        self.mediaPlayer.setVolume(volume)
+        print(f"Volume set to: {volume}")
         
 
     def loginfunction(self):
@@ -100,7 +105,7 @@ class Home(QMainWindow):
 
 # initialize the app
 app = QApplication(sys.argv)
-MainWindowApp = Home()
+MainWindowApp = Login()
 MainWindowApp.widget = QStackedWidget()
 MainWindowApp.widget.setWindowTitle("Kaway - FSL Learning App") 
 MainWindowApp.widget.addWidget(MainWindowApp)

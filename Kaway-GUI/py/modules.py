@@ -74,6 +74,28 @@ class Modules(QWidget):
         self.mediaPlayer.mediaStatusChanged.connect(self.handleMediaStatusChanged)
 
 
+
+        self.profile = self.findChild(QPushButton, "Profile")
+        self.profile.clicked.connect(self.gotoProfile)
+        self.settings = self.findChild(QPushButton, "Settings")
+        self.settings.clicked.connect(self.gotoSettings)
+
+    def gotoSettings(self):
+        from settings import Settings
+        print("Button clicked!")
+        settings = Settings(self.stacked_widget)
+        self.stacked_widget.addWidget(settings)
+        self.stacked_widget.setCurrentWidget(settings)
+
+    def gotoProfile(self):
+        from profile import Profile
+        print("Button clicked!")
+        profile = Profile(self.stacked_widget)
+        self.stacked_widget.addWidget(profile)
+        self.stacked_widget.setCurrentWidget(profile)
+
+
+
     def handleMediaStatusChanged(self, status):
         if status == QMediaPlayer.EndOfMedia:
             self.mediaPlayer.setPosition(0)

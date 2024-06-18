@@ -97,7 +97,7 @@ background-color: rgba(255, 255, 255, 0);</string>
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>240</y>
+         <y>790</y>
          <width>271</width>
          <height>91</height>
         </rect>
@@ -136,7 +136,8 @@ border-bottom-right-radius: 32px;</string>
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">color:rgb(255, 255, 255)</string>
+           <string notr="true">color:rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 0)</string>
           </property>
           <property name="text">
            <string>Settings</string>
@@ -330,41 +331,28 @@ border-radius: 32px</string>
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QWidget" name="horizontalLayoutWidget_3">
+       <widget class="QPushButton" name="pushButton_3">
         <property name="geometry">
          <rect>
-          <x>21</x>
-          <y>59</y>
-          <width>941</width>
-          <height>91</height>
+          <x>20</x>
+          <y>70</y>
+          <width>1009</width>
+          <height>57</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QPushButton" name="pushButton_2">
-           <property name="font">
-            <font>
-             <family>Inter</family>
-             <pointsize>36</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">color: rgb(255, 255, 255);
+        <property name="font">
+         <font>
+          <family>Inter</family>
+          <pointsize>36</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 255, 255);
 text-align:left;</string>
-           </property>
-           <property name="text">
-            <string>Volume:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSlider" name="volume">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        </property>
+        <property name="text">
+         <string>Sign Out</string>
+        </property>
        </widget>
       </widget>
       <widget class="QFrame" name="UpperFrame_3">
@@ -439,7 +427,7 @@ padding-bottom:7px;</string>
          <x>50</x>
          <y>360</y>
          <width>1451</width>
-         <height>161</height>
+         <height>81</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -452,29 +440,6 @@ border-radius: 32px</string>
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QPushButton" name="pushButton_3">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>80</y>
-          <width>1009</width>
-          <height>57</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Inter</family>
-          <pointsize>36</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
-text-align:left;</string>
-        </property>
-        <property name="text">
-         <string>Sign Out</string>
-        </property>
-       </widget>
       </widget>
       <widget class="QWidget" name="gridLayoutWidget">
        <property name="geometry">
