@@ -331,28 +331,50 @@ border-radius: 32px</string>
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QWidget" name="horizontalLayoutWidget_3">
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>70</y>
-          <width>1009</width>
-          <height>57</height>
+          <y>60</y>
+          <width>311</width>
+          <height>80</height>
          </rect>
         </property>
-        <property name="font">
-         <font>
-          <family>Inter</family>
-          <pointsize>36</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 255, 255);
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="font">
+            <font>
+             <family>Inter</family>
+             <pointsize>36</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);
 text-align:left;</string>
-        </property>
-        <property name="text">
-         <string>Sign Out</string>
-        </property>
+           </property>
+           <property name="text">
+            <string>Volume:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="volume">
+           <property name="font">
+            <font>
+             <pointsize>24</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color:rgba(0,0,0,0);
+border:none;
+border-bottom:2px solid rgba(105, 118, 132,  255);
+color:rgba(255,255,255,230);
+padding-bottom:7px;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </widget>
       <widget class="QFrame" name="UpperFrame_3">
@@ -427,7 +449,7 @@ padding-bottom:7px;</string>
          <x>50</x>
          <y>360</y>
          <width>1451</width>
-         <height>81</height>
+         <height>181</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -440,6 +462,29 @@ border-radius: 32px</string>
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
+       <widget class="QPushButton" name="pushButton_4">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>90</y>
+          <width>1009</width>
+          <height>57</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>Inter</family>
+          <pointsize>36</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 255, 255);
+text-align:left;</string>
+        </property>
+        <property name="text">
+         <string>Sign Out</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="gridLayoutWidget">
        <property name="geometry">

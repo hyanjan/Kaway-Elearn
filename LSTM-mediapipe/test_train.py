@@ -54,10 +54,10 @@ def extract_keypoints(results):
 
 # Path for exported data, numpy arrays
 path = "C:\\Users\\hyanx\\Documents\\Thesis\\"
-DATA_PATH = os.path.join(path,'MP_HyanTest') 
+DATA_PATH = os.path.join(path,'MP_Mod3') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['Ako si', 'Ano pangalan mo', 'Ilang taon ka na', 'Sino'])
+actions = np.array(['Ingat ka', 'Kumusta ka', 'Magandang araw', 'Magandang Gabi', 'Magandang Hapon', 'Magandang Umaga', 'Maraming Salamat', 'Paalam', 'Pasensya na'])
 
 # Thirty videos worth of data
 no_sequences = 33
@@ -131,7 +131,7 @@ model.summary()
 #Save model
 #model.save('C:/Users/hyanx/Documents/Thesis/MP_HyanLetters/letters_2.h5')
 #model.save(r'C:\Users\hyanx\Documents\Thesis\MP_Hyan\introduction.h5')
-model.save(r'C:\Users\hyanx\Documents\Thesis\Kaway-GUI\model\m2.h5')
+model.save(r'C:\Users\hyanx\Documents\Thesis\Kaway-GUI\model\Mod3_New.h5')
 
 # Real-time Test
 # colors = [(245,117,16), (117,245,16), (16,117,245)]

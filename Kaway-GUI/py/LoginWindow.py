@@ -8,6 +8,7 @@ import sys
 import warnings
 import os
 import mediapipe as mp
+from db import database
 
 # initialize files and warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -36,15 +37,49 @@ class Login(QMainWindow):
         self.movie.start()
         self.loadinggif.hide()
         self.error.hide()
+        self.login.setToolTip("Click here to Login")
+        self.emailfield.setToolTip("Enter your Username")
+        self.passwordfield.setToolTip("Enter your Password")
 
 
         self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password)
         self.login.clicked.connect(self.loginfunction)
 
         # Setup background music
-        self.setup_background_music()
+        self.volume = Volume()
+        self.volume.setup_background_music()
+        self.volume.start()
 
+    def loginfunction(self):
+        user = self.emailfield.text()
+        password = self.passwordfield.text()
+ 
+        if len(user)==0 or len(password)==0:
+            print("Please input all fields.")
+            self.error.show()
+            self.error.setText("Please input all fields.")
 
+        else:
+            if user == 'student1' and password == '12345':
+                self.error.show()
+                self.error.setText("Successfully logged in as student.")
+                self.loadinggif.show()
+                self.loadinggif.setMovie(self.movieloading)
+                self.movieloading.start() 
+                QtTest.QTest.qWait(3000)
+
+                
+                from home import Home
+                
+                print("Button clicked!")
+                home = Home(self.widget)
+                self.widget.addWidget(home)
+                self.widget.setCurrentWidget(home)
+            else:
+                self.error.show()
+                self.error.setText("Invalid username or password")
+
+class Volume(QThread):
     def setup_background_music(self):
         # Create a QMediaPlayer object
         self.mediaPlayer = QMediaPlayer()
@@ -67,47 +102,20 @@ class Login(QMainWindow):
         # Play the music
         self.mediaPlayer.play()
 
-    def setVolume(self, volume):
-        # Set the volume of the media player
-        self.mediaPlayer.setVolume(volume)
-        print(f"Volume set to: {volume}")
-        
+    def run(self):
+        while(True):
+            self.mediaPlayer.setVolume(database.getVolume())
 
-    def loginfunction(self):
-        user = self.emailfield.text()
-        password = self.passwordfield.text()
- 
-        if len(user)==0 or len(password)==0:
-            print("Please input all fields.")
-            self.error.show()
-            self.error.setText("Please input all fields.")
 
-        else:
-            if user == 'admin' and password == 'admin':
-                self.error.setText("Successfully logged in.")
-                self.loadinggif.show()
-                self.loadinggif.setMovie(self.movieloading)
-                self.movieloading.start() 
-                QtTest.QTest.qWait(3000)
-
-                
-                from home import Home
-                
-                print("Button clicked!")
-                home = Home(self.widget)
-                self.widget.addWidget(home)
-                self.widget.setCurrentWidget(home)
-            else:
-                self.error.show()
-                self.error.setText("Invalid username or password")
 
 
 
 # initialize the app
-app = QApplication(sys.argv)
-MainWindowApp = Login()
-MainWindowApp.widget = QStackedWidget()
-MainWindowApp.widget.setWindowTitle("Kaway - FSL Learning App") 
-MainWindowApp.widget.addWidget(MainWindowApp)
-MainWindowApp.widget.show()
-sys.exit(app.exec_())
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    MainWindowApp = Login()
+    MainWindowApp.widget = QStackedWidget()
+    MainWindowApp.widget.setWindowTitle("Kaway - FSL Learning App") 
+    MainWindowApp.widget.addWidget(MainWindowApp)
+    MainWindowApp.widget.show()
+    sys.exit(app.exec_())

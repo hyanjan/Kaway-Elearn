@@ -19,7 +19,7 @@ class Profile(QMainWindow):
         self.stacked_widget = stacked_widget
 
         # Load the ui
-        uic.loadUi("Kaway-GUI/pages/profile.ui", self)
+        uic.loadUi("Kaway-GUI/pages/profilestudent.ui", self)
         self.setFixedSize(1910, 950)
 
         # define buttons

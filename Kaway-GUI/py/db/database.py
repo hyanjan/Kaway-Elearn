@@ -172,3 +172,24 @@ def updateNotif(lesson):
     conn.commit()
     conn.close()
     return lesson
+
+def getVolume():
+    conn = sqlite3.connect('Kaway-GUI\\py\\db\\users.db')
+    c = conn.cursor()
+
+    c.execute(f"SELECT volume FROM users WHERE rowid=1")
+    value = c.fetchone()[0]
+
+    conn.commit()
+    conn.close()
+    return value
+
+def setVolume(volume):
+    conn = sqlite3.connect('Kaway-GUI\\py\\db\\users.db')
+    c = conn.cursor()
+
+    c.execute("UPDATE users SET volume = ?", (volume,))
+
+
+    conn.commit()
+    conn.close()

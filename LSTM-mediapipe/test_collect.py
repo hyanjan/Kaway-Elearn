@@ -53,10 +53,10 @@ def extract_keypoints(results):
 
 # Path for exported data, numpy arrays
 path = os.getcwd()
-DATA_PATH = os.path.join(path,'MP_Hyan') 
+DATA_PATH = os.path.join(path,'MP_Mod3') 
 print(DATA_PATH)
 # Actions that we try to detect
-actions = np.array(['Sino_'])
+actions = np.array(['Magandang Hapon'])
 
 # Thirty videos worth of data
 no_sequences = 33
@@ -71,7 +71,7 @@ for action in actions:
         except:
             pass
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 if not cap.isOpened():
     print("Error: Could not open video capture.")
 else:   

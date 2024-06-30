@@ -98,6 +98,11 @@ class UI(QMainWindow):
         self.lessontabButton = self.findChild(QPushButton, "Lessons")
         self.lessontabButton.clicked.connect(self.gotoLessons)
 
+        self.cameraButton.setToolTip('Click this first to open your camera')
+        self.detectionButton.setToolTip('Click this next to start detecting your sign language')
+        self.reviewButton.setToolTip('Click to review again')
+        self.nextModuleButton.setToolTip('Click to proceed to the next module')
+
 
     def goReview(self):
         from modules import Modules
@@ -231,7 +236,7 @@ class Detection(QThread):
     def stopCamera(self):
         if self.cap and self.cap.isOpened():
             self.cap.release()
-        self.timer.stop()
+            self.timer.stop()
 
     def startTimer(self):
         TIMER = int(3)

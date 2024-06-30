@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtMultimedia import *
 import warnings
 import os
 
@@ -28,8 +29,8 @@ class Settings(QMainWindow):
         self.tutorialButton = self.findChild(QPushButton, "Tutorial")
         self.userLabel = self.findChild(QLabel, "User")
         self.camera = self.findChild(QLineEdit, "camera")
+        self.volume = self.findChild(QLineEdit, "volume")
         self.save = self.findChild(QPushButton, "save")
-
 
         # Define what buttons do
         self.lessontabButton.clicked.connect(self.gotoLessons)
@@ -40,13 +41,20 @@ class Settings(QMainWindow):
         self.userLabel.setText(username)
 
         self.save.clicked.connect(self.saveSettings)
+        self.save.clicked.connect(self.saveVolume)  # Add this line
 
         self.profile = self.findChild(QPushButton, "Profile")
         self.profile.clicked.connect(self.gotoProfile)
 
+
+    def saveVolume(self):
+        volume_level = int(self.volume.text())
+        print(volume_level)
+        database.setVolume(volume_level)
+
+
     def saveSettings(self):
         camSettings = self.camera.text()
-
 
         if camSettings == '0':
             database.setCam(0)
@@ -56,7 +64,6 @@ class Settings(QMainWindow):
 
         else:
             print("Please input all fields.")
-
 
     def gotoLessons(self):
         #import functions

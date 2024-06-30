@@ -27,6 +27,7 @@ class Lessons(QWidget):
         # define buttons
         self.lessonAlphabetButton = self.findChild(QPushButton, "ModuleOne")
         self.homeButton = self.findChild(QPushButton, "Home")
+        self.lessontabButton = self.findChild(QPushButton, "Lessons")
         self.moduleOne = self.findChild(QPushButton, 'ModuleOne')
         self.moduleTwo = self.findChild(QPushButton, 'ModuleTwo')
         self.moduleThree = self.findChild(QPushButton, 'ModuleThree')
@@ -52,6 +53,13 @@ class Lessons(QWidget):
         self.profile.clicked.connect(self.gotoProfile)
         self.settings = self.findChild(QPushButton, "Settings")
         self.settings.clicked.connect(self.gotoSettings)
+
+        self.homeButton.setToolTip('Go to Home Page')  
+        self.lessontabButton.setToolTip('Go to Lessons Page')
+        self.profile.setToolTip('Go to your Profile')
+        self.settings.setToolTip('Go to Settings')  
+        self.moduleOne.setToolTip('Go to Module 1')  
+        self.subOne.setToolTip('Go to Module 1')  
 
     def gotoSettings(self):
         from settings import Settings

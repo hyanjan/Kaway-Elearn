@@ -95,6 +95,9 @@ class LessonsAlphabet(QWidget):
         self.settings = self.findChild(QPushButton, "Settings")
         self.settings.clicked.connect(self.gotoSettings)
 
+        self.aButton.setToolTip('Go to Subtopic 1')
+        self.bButton.setToolTip('Go to Subtopic 2')
+
     def gotoSettings(self):
         from settings import Settings
         print("Button clicked!")

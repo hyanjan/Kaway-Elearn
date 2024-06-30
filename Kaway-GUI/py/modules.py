@@ -73,7 +73,9 @@ class Modules(QWidget):
         self.mediaPlayer.durationChanged.connect(self.durationChanged)
         self.mediaPlayer.mediaStatusChanged.connect(self.handleMediaStatusChanged)
 
-
+        self.playButton.setToolTip('Play the video')
+        self.pauseButton.setToolTip('Pause the video')
+        self.practiceButton.setToolTip('Start your assessment')
 
         self.profile = self.findChild(QPushButton, "Profile")
         self.profile.clicked.connect(self.gotoProfile)

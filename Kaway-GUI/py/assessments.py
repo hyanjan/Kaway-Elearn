@@ -8,7 +8,7 @@ import warnings
 import os
 import cv2
 from functools import partial
-import playsound
+from playsound import playsound
 
 #Detection req import
 import cv2
@@ -386,7 +386,7 @@ class Detection(QThread):
             model = 'Kaway-GUI/model/introduction.h5'
             return model
         elif lesson < 42 and lesson > 32:
-            model = 'Kaway-GUI/model/greetings.h5'
+            model = 'Kaway-GUI/model/Mod3_New.h5'
             return model
         elif lesson in vocabA:
             model = 'Kaway-GUI/model/vocabA.h5'

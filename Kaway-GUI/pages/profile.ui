@@ -354,7 +354,7 @@ border-radius: 32px</string>
 text-align:left;</string>
            </property>
            <property name="text">
-            <string>Name: Admin</string>
+            <string>School: FEU Institute of Technology</string>
            </property>
           </widget>
          </item>
@@ -373,7 +373,7 @@ text-align:left;</string>
               <string notr="true">color: rgb(255, 255, 255);</string>
              </property>
              <property name="text">
-              <string>Module 1: Completed</string>
+              <string>Grade 1 - Section A</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -396,53 +396,7 @@ text-align:left;</string>
               <string notr="true">color: rgb(255, 255, 255);</string>
              </property>
              <property name="text">
-              <string>Module 2: Completed</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="AnswerText_10">
-             <property name="font">
-              <font>
-               <family>HoloLens MDL2 Assets</family>
-               <pointsize>24</pointsize>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">color: rgb(255, 255, 255);</string>
-             </property>
-             <property name="text">
-              <string>Module 3: In Progress</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="AnswerText_11">
-             <property name="font">
-              <font>
-               <family>HoloLens MDL2 Assets</family>
-               <pointsize>24</pointsize>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">color: rgb(255, 255, 255);</string>
-             </property>
-             <property name="text">
-              <string>Module 4: In Progress</string>
+              <string>Grade 2 - Section C</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -591,7 +545,7 @@ text-align:left;</string>
             <string notr="true">color: rgb(255, 255, 255);</string>
            </property>
            <property name="text">
-            <string>Grade: 1</string>
+            <string>Role: FSL Teacher</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

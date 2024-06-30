@@ -274,12 +274,46 @@ background-color: rgba(255, 255, 255, 0)</string>
         </size>
        </property>
       </widget>
+      <widget class="QPushButton" name="Studio">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>580</y>
+         <width>279</width>
+         <height>42</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Inter</family>
+         <pointsize>26</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color:rgb(255, 255, 255)</string>
+       </property>
+       <property name="text">
+        <string>Studio</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../linear/studio.svg</normaloff>../linear/studio.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>35</width>
+         <height>35</height>
+        </size>
+       </property>
+      </widget>
       <zorder>frame</zorder>
       <zorder>Lessons</zorder>
       <zorder>verticalLayoutWidget</zorder>
       <zorder>horizontalLayoutWidget</zorder>
       <zorder>Profile</zorder>
       <zorder>Home</zorder>
+      <zorder>Studio</zorder>
      </widget>
     </widget>
     <widget class="QWidget" name="RightContainer" native="true">

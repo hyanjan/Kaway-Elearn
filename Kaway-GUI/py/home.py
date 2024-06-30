@@ -19,12 +19,14 @@ class Home(QMainWindow):
         self.stacked_widget = stacked_widget
 
         # Load the ui
-        uic.loadUi("Kaway-GUI/pages/hometab.ui", self)
+        uic.loadUi("Kaway-GUI/pages/hometab_student.ui", self)
         self.setFixedSize(1910, 950)
 
         # define buttons
         self.lessontabButton = self.findChild(QPushButton, "Lessons")
+        self.studioButton = self.findChild(QPushButton, "Studio")
         self.tutorialButton = self.findChild(QPushButton, "Tutorial")
+        self.homeButton = self.findChild(QPushButton, "Home")
         self.userLabel = self.findChild(QLabel, "User")
         self.homegif = self.findChild(QLabel, 'GIF')
         self.movie = QMovie(r"Kaway-GUI\linear\home.gif") 
@@ -56,6 +58,7 @@ class Home(QMainWindow):
         self.tutorialButton.clicked.connect(self.gotoTutorial)
         self.ContinueOneButton.clicked.connect(self.gotoContinueOne)
         self.ContinueTwoButton.clicked.connect(self.gotoContinueTwo)
+        # self.studioButton.clicked.connect(self.gotoStudio)
 
         # Set username to page
         username = database.loadUser()
@@ -65,6 +68,24 @@ class Home(QMainWindow):
         self.profile.clicked.connect(self.gotoProfile)
         self.settings = self.findChild(QPushButton, "Settings")
         self.settings.clicked.connect(self.gotoSettings)
+
+        self.homeButton.setToolTip('Go to Home Page')  
+        self.lessontabButton.setToolTip('Go to Lessons Page')
+        self.profile.setToolTip('Go to your Profile')
+        self.settings.setToolTip('Go to Settings')    
+        # self.studioButton.setToolTip('Create and Edit Lessons')  
+
+        self.tutorialButton.setToolTip('Click here to learn how to use Kaway Application')
+        self.ContinueOneButton.setToolTip('Go back to your last module')
+        self.ContinueTwoButton.setToolTip('Go back to your last module')
+        self.NotifButton.setToolTip('View your notifications')     
+
+    # def gotoStudio(self):
+    #     from studio import Studio
+
+    #     studio = Studio(self.stacked_widget)
+    #     self.stacked_widget.addWidget(studio)
+    #     self.stacked_widget.setCurrentWidget(studio)
 
     def gotoSettings(self):
         from settings import Settings
